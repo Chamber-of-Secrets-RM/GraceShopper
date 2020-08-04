@@ -15,3 +15,10 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.post('/signup', (req, res, next) => {
+  User.create(req.body)
+    .then(user => user.update(req.body))
+    .then(user => res.json(user))
+    .catch(next)
+})
