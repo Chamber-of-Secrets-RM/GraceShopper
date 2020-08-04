@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import ProductElement from './ProductElement'
 
 /**
  * COMPONENT
@@ -13,14 +14,16 @@ class AllProducts extends React.Component {
     //add to redux store
   }
   render() {
-    const products = []
+    const {products} = this.props
     return (
       <div>
-        <div className="Product-container">
+        <div className="product-container">
           {products.length === 0 ? (
             <div>No available Products</div>
           ) : (
-            <div>Place holder</div>
+            products.map(chair => {
+              return <ProductElement key={chair.id} product={chair} />
+            })
           )}
         </div>
       </div>
@@ -38,4 +41,4 @@ const mapDispatch = dispatch => {
   return {}
 }
 
-export default connect(null, null)(AllProducts)
+export default connect(mapState, null)(AllProducts)
