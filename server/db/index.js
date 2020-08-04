@@ -13,7 +13,7 @@ User.hasMany(Order)
 Order.belongsTo(User)
 
 // register models
-// require('./models')
+require('./models')
 
 module.exports = {
   db
