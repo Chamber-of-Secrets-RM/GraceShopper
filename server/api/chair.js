@@ -4,13 +4,22 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const users = await Chair.findAll({
-      // explicitly select only the id and email fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-    })
-    res.json(users)
+    const chairs = await Chair.findAll({})
+    res.json(chairs)
   } catch (err) {
     next(err)
+  }
+})
+
+router.get('/:chairId', async (req, res, next) => {
+  try {
+    const data = await Chair.findOne({
+      where: {
+        id: req.params.chairId
+      }
+    })
+    res.json(data)
+  } catch (error) {
+    next(error)
   }
 })
