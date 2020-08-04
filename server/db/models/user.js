@@ -30,7 +30,6 @@ const User = db.define('user', {
   cartItems: {
     type: Sequelize.ARRAY(Sequelize.INTEGER)
   }
-
 })
 
 module.exports = User
