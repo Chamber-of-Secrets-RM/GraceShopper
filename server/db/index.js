@@ -6,7 +6,7 @@ const db = require('./db')
 // User.hasMany(Chair)
 
 // register models
-// require('./models')
+require('./models')
 
 module.exports = {
   db
