@@ -23,6 +23,18 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+router.get('/:chairId', async (req, res, next) => {
+  try {
+    const data = await Cart.findOne({
+      where: {
+        id: req.params.chairId
+      }
+    })
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.post('/', isAdminMiddleware, (req, res, next) => {
   Chair.create(req.body)
