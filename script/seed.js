@@ -1,6 +1,6 @@
 const {green, red} = require('chalk')
 
-const db = require('../server/db')
+const {db} = require('../server/db')
 // const User = require("./server/db/models/user");
 const Chair = require('../server/db/models/chair')
 
