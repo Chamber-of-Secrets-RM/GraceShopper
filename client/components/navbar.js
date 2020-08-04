@@ -4,6 +4,10 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
 
+/**
+ * COMPONENT
+ */
+
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
     <h1>Chamber of Secrets</h1>

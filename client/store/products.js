@@ -31,7 +31,33 @@ export function fetchProducts() {
  * Reducer
  */
 
-const initialState = []
+const initialState = [
+  {
+    id: 1,
+    name: 'Red Chair',
+    price: 99
+  },
+  {
+    id: 2,
+    name: 'Yellow Chair',
+    price: 77
+  },
+  {
+    id: 3,
+    name: 'Blue Chair',
+    price: 55
+  },
+  {
+    id: 4,
+    name: 'Green Chair',
+    price: 33
+  },
+  {
+    id: 5,
+    name: 'Purple Chair',
+    price: 11
+  }
+]
 
 export default function productsReducer(state = initialState, action) {
   switch (action.type) {
