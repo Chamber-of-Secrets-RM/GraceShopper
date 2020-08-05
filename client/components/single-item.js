@@ -22,6 +22,7 @@ class SingleItem extends Component {
   handleSubmit(event) {
     event.preventDefault()
     console.log('event target:', event.target)
+    // if (!this.props.order) {}
     this.props.addToCart(1, this.props.singleProduct, this.state.quantity)
   }
   render() {
@@ -60,7 +61,8 @@ class SingleItem extends Component {
 
 const mapState = state => {
   return {
-    singleProduct: state.singleProduct
+    singleProduct: state.singleProduct,
+    order: state.order
   }
 }
 
