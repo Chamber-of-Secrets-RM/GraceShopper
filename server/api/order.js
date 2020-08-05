@@ -34,7 +34,6 @@ router.get(
     }
   }
 )
-
 router.get(
   // order history route
   '/:userId/History/',
@@ -54,6 +53,23 @@ router.get(
     }
   }
 )
+// This route gives all the info you need for what is in your cart/Checking out
+router.get(
+  '/:orderId',
+  isAdminOrProperUserMiddleware,
+  async (req, res, next) => {
+    try {
+      const data = await OrdersChairs.findAll({
+        where: {
+          orderId: req.params.orderId
+        }
+      })
+      res.json(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+)
 router.post('/:orderId/chair/:chairId/', async (req, res, next) => {
   try {
     const userOrderInstance = await Orders.findAll({
@@ -65,6 +81,7 @@ router.post('/:orderId/chair/:chairId/', async (req, res, next) => {
     if (!userOrderInstance) {
       err.message = 'this was a bad user'
       next(err) // needs to be tested, how are we going to throw custom error
+      /// Could just check req.session instead of lines 69-78
     }
     const data = await OrdersChairs.create({
       where: {
