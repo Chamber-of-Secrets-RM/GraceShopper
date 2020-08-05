@@ -115,8 +115,6 @@
 
 </details>
 
-`Wow guys we made it to here if we are still worying about stuff here just relax we've done a good job`
-
 ## TIER 4: S Tier
 
 ### As a customer, I want to be able to:
