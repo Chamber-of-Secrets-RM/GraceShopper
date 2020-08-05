@@ -138,7 +138,6 @@
 
 ### As a CEO/CTO, I want:
 
-`LOL we will never get to this spec but if we do we'll have a drink maybe even ten of em`
 [] the website to allow for multi tenancy so that we can potentially white label the application and allow users to create "shops."
 [] _Think Etsy and Amazon, where the sellers can have their own "shops" within the platforms._
 
