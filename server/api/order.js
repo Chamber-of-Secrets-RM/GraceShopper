@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const {Order} = require('../db/models')
+const {Order, OrdersChairs} = require('../db/models')
+
 module.exports = router
 
 const isAdminOrProperUserMiddleware = (req, res, next) => {
@@ -33,6 +34,7 @@ router.get(
     }
   }
 )
+
 router.get(
   // order history route
   '/:userId/History/',
@@ -52,12 +54,69 @@ router.get(
     }
   }
 )
+///     /api/order/:orderId/chair/:chairId/quantity/:quantity
+router.post(
+  '/:orderId/chair/:chairId/quantity/:quantity',
+  async (err, req, res, next) => {
+    try {
+      const userOrderInstance = await Orders.findAll({
+        where: {
+          userId: req.user.id,
+          id: req.params.orderId
+        }
+      })
+      if (!userOrderInstance) {
+        err.message = 'this was a bad user'
+        next(err) // needs to be tested, how are we going to throw custom error
+      }
+      const data = await OrdersChairs.update(
+        {
+          quantity: req.params.quantity
+        },
+        {
+          where: {
+            orderId: req.params.orderId,
+            chairId: req.params.chairId
+          }
+        }
+      )
+      res.json(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+router.delete('/:orderId/chair/:chairId/', async (req, res, next) => {
+  try {
+    const userOrderInstance = await Orders.findAll({
+      where: {
+        userId: req.user.id,
+        id: req.params.orderId
+      }
+    })
+    if (!userOrderInstance) {
+      err.message = 'this was a bad user'
+      next(err) // needs to be tested, how are we going to throw custom error
+    }
+    OrdersChairs.destroy({
+      where: {
+        chairId: req.params.chairId,
+        orderId: req.params.orderId
+      }
+    })
+    res.status(204).send()
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.put('/:orderId', async (req, res, next) => {
   try {
     const orderInstance = await Order.findByPk(req.params.orderId)
     if (req.user.id == orderInstance.userId) {
       // needs to be tested, unsure of left variable
+      // this is the route we might use for changing isFulfilled
+
       const data = await orderInstance.update(req.body)
       res.json(data)
     } else {
