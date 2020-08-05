@@ -10,11 +10,12 @@ const Chair = db.define('chair', {
     }
   },
   imageUrl: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     defaultValue: '/images/mars.png'
   },
   price: {
-    type: Sequelize.FLOAT,
+    //need a function to get the 'float number'
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   rating: {
