@@ -54,8 +54,33 @@ router.get(
     }
   }
 )
+router.post('/:orderId/chair/:chairId/', async (req, res, next) => {
+  try {
+    const userOrderInstance = await Orders.findAll({
+      where: {
+        userId: req.user.id,
+        id: req.params.orderId
+      }
+    })
+    if (!userOrderInstance) {
+      err.message = 'this was a bad user'
+      next(err) // needs to be tested, how are we going to throw custom error
+    }
+    const data = await OrdersChairs.create({
+      where: {
+        orderId: req.params.orderId,
+        chairId: req.params.chairId,
+        quantity: req.body.quantity,
+        itemTotal: req.body.itemTotal
+      }
+    })
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
+})
 ///     /api/order/:orderId/chair/:chairId/quantity/:quantity
-router.post(
+router.put(
   '/:orderId/chair/:chairId/quantity/:quantity',
   async (err, req, res, next) => {
     try {

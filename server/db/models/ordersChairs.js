@@ -2,11 +2,11 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const OrdersChairs = db.define('ordersChairs', {
-  Quantity: {
+  quantity: {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  ItemTotal: {
+  itemTotal: {
     type: Sequelize.FLOAT,
     allowNull: false
   }
