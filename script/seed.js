@@ -3,6 +3,9 @@ const {green, red} = require('chalk')
 const {db} = require('../server/db')
 // const User = require("./server/db/models/user");
 const Chair = require('../server/db/models/chair')
+const User = require('../server/db/models/user')
+const Order = require('../server/db/models/order')
+const OrdersChairs = require('../server/db/models/ordersChairs')
 
 const CSS_COLOR_NAMES = [
   'AliceBlue',
@@ -154,6 +157,39 @@ const CSS_COLOR_NAMES = [
   'Yellow',
   'YellowGreen'
 ]
+const testUser = [
+  {
+    email: 'pesekm@dupage.edu',
+    isAdmin: false,
+    password: 'secret'
+  },
+  {
+    email: 'admin@admin.com',
+    isAdmin: true,
+    password: 'superSecret'
+  }
+]
+const testOrder = [
+  {
+    isFulfilled: 0,
+    userId: 1
+  }
+]
+const testOrdersChairs = [
+  {
+    quantity: 5,
+    orderId: 1,
+    chairId: 1,
+    itemTotal: 1485
+  },
+  {
+    quantity: 1,
+    orderId: 1,
+    chairId: 2,
+    itemTotal: 981
+  }
+]
+
 const testChairs = [
   {
     name: 'Red Chair',
@@ -191,6 +227,21 @@ const seed = async () => {
     await Promise.all(
       Chairs.map(chair => {
         return Chair.create(chair)
+      })
+    )
+    await Promise.all(
+      testUser.map(user => {
+        return User.create(user)
+      })
+    )
+    await Promise.all(
+      testOrder.map(order => {
+        return Order.create(order)
+      })
+    )
+    await Promise.all(
+      testOrdersChairs.map(ordersChairs => {
+        return OrdersChairs.create(ordersChairs)
       })
     )
 

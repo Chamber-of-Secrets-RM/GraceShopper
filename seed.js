@@ -153,6 +153,33 @@ const CSS_COLOR_NAMES = [
   'Yellow',
   'YellowGreen'
 ]
+const testUser = [
+  {
+    email: 'pesekm@dupage.edu',
+    isAdmin: false,
+    password: 'secret'
+  }
+]
+const testOrder = [
+  {
+    isFulfilled: 0
+  }
+]
+const testOrdersChairs = [
+  {
+    quantity: 5,
+    orderId: 1,
+    chairId: 1,
+    itemTotal: 1485
+  },
+  {
+    quantity: 1,
+    orderId: 1,
+    chairId: 2,
+    itemTotal: 981
+  }
+]
+
 const testChairs = [
   {
     name: 'Red Chair',
@@ -190,6 +217,21 @@ const seed = async () => {
     await Promise.all(
       Chairs.map(chair => {
         return Chair.create(chair)
+      })
+    )
+    await Promise.all(
+      testUser.map(user => {
+        return User.create(user)
+      })
+    )
+    await Promise.all(
+      testOrder.map(order => {
+        return Order.create(order)
+      })
+    )
+    await Promise.all(
+      testOrdersChairs.map(ordersChairs => {
+        return OrdersChairs.create(ordersChairs)
       })
     )
 
