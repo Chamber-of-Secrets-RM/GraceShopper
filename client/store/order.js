@@ -44,7 +44,7 @@ export function fetchOrder(orderId) {
 export function deleteItem(orderId, productId) {
   return async function(dispatch) {
     try {
-      await axios.delete(`/api/throughTable/${orderId}/${productId}`)
+      await axios.delete(`api/order/${orderId}/chair/${productId}`)
       dispatch(removeItem(productId))
     } catch (err) {
       console.error(err)
@@ -54,7 +54,7 @@ export function deleteItem(orderId, productId) {
 export function changeQuantity(orderId, productId, quantity) {
   return async function(dispatch) {
     try {
-      await axios.put(`/api/throughTable/${orderId}/${productId}`, {
+      await axios.put(`api/order/${orderId}/chair/${productId}`, {
         quantity: quantity
       })
       dispatch(updateQuantity(productId, quantity))
