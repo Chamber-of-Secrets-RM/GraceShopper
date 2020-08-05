@@ -2,6 +2,7 @@ const router = require('express').Router()
 const {Chair} = require('../db/models')
 module.exports = router
 
+// move to a sepreate file and import as nessecary
 const isAdminMiddleware = (req, res, next) => {
   const currentUser = req.session.user
   if (currentUser && currentUser.isAdmin) {

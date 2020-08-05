@@ -7,7 +7,7 @@ const OrdersChairs = db.define('ordersChairs', {
     allowNull: false
   },
   itemTotal: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.INTEGER,
     allowNull: false
   }
 })

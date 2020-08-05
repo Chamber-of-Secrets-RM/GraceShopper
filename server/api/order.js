@@ -72,7 +72,7 @@ router.get(
 )
 router.post('/:orderId/chair/:chairId/', async (req, res, next) => {
   try {
-    const userOrderInstance = await Orders.findAll({
+    const userOrderInstance = await Order.findAll({
       where: {
         userId: req.user.id,
         id: req.params.orderId
@@ -101,7 +101,7 @@ router.put(
   '/:orderId/chair/:chairId/quantity/:quantity',
   async (err, req, res, next) => {
     try {
-      const userOrderInstance = await Orders.findAll({
+      const userOrderInstance = await Order.findAll({
         where: {
           userId: req.user.id,
           id: req.params.orderId
@@ -130,7 +130,7 @@ router.put(
 )
 router.delete('/:orderId/chair/:chairId/', async (req, res, next) => {
   try {
-    const userOrderInstance = await Orders.findAll({
+    const userOrderInstance = await Order.findAll({
       where: {
         userId: req.user.id,
         id: req.params.orderId
@@ -152,24 +152,28 @@ router.delete('/:orderId/chair/:chairId/', async (req, res, next) => {
   }
 })
 
-router.put('/:orderId', async (req, res, next) => {
-  try {
-    const orderInstance = await Order.findByPk(req.params.orderId)
-    if (req.user.id == orderInstance.userId) {
-      // needs to be tested, unsure of left variable
-      // this is the route we might use for changing isFulfilled
+router.put(
+  '/:orderId',
+  isAdminOrProperUserMiddleware,
+  async (req, res, next) => {
+    try {
+      const orderInstance = await Order.findByPk(req.params.orderId)
+      if (req.user.id == orderInstance.userId) {
+        // needs to be tested, unsure of left variable
+        // this is the route we might use for changing isFulfilled
 
-      const data = await orderInstance.update(req.body)
-      res.json(data)
-    } else {
-      throw new Error('Not the right user')
+        const data = await orderInstance.update(req.body)
+        res.json(data)
+      } else {
+        throw new Error('Not the right user')
+      }
+    } catch (error) {
+      next(error)
     }
-  } catch (error) {
-    next(error)
   }
-})
+)
 
-router.post('/', async (req, res, next) => {
+router.post('/', isAdminOrProperUserMiddleware, async (req, res, next) => {
   try {
     const data = await Order.create(req.body)
     res.json(data)
