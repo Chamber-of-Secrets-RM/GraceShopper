@@ -46,7 +46,7 @@ class SingleItem extends Component {
               name="quantity"
               type="number"
               min="0"
-              value={this.quantity}
+              value={this.state.quantity}
               onChange={this.handleChange}
             />
             <button type="submit">Add to cart</button>
