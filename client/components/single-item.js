@@ -8,6 +8,7 @@ import {connect} from 'react-redux'
 class SingleItem extends Component {
   render() {
     const {singleProduct} = this.props
+    console.log(singleProduct, singleProduct.id)
     if (singleProduct && singleProduct.id) {
       return (
         <div className="single-product-view">
