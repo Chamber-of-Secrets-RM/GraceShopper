@@ -8,6 +8,9 @@ const User = db.define('user', {
     unique: true,
     allowNull: false
   },
+  isAdmin: {
+    type: Sequelize.BOOLEAN
+  },
   password: {
     type: Sequelize.STRING,
     // Making `.password` act like a func hides it when serializing to JSON.
@@ -26,9 +29,6 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
-  },
-  cartItems: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER)
   }
 })
 

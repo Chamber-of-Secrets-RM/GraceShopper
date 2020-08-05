@@ -17,29 +17,60 @@ const isAdminMiddleware = (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const users = await Chair.findAll({
-      // explicitly select only the id and email fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-    })
-    res.json(users)
+    const chairs = await Chair.findAll({})
+    res.json(chairs)
   } catch (err) {
     next(err)
   }
 })
-
-router.post('/', isAdminMiddleware, (req, res, next) => {
-  Chair.create(req.body)
-    .then(chair => {
-      res.status(201).json(chair)
+router.get('/:chairId', async (req, res, next) => {
+  try {
+    const data = await Cart.findOne({
+      where: {
+        id: req.params.chairId
+      }
     })
-    .catch(next)
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
 })
-router.delete('/:id', isAdminMiddleware, (req, res, next) => {
-  req.requestedChair
-    .destroy()
-    .then(() => {
-      res.status(204).end()
+
+router.post('/', isAdminMiddleware, async (req, res, next) => {
+  try {
+    const data = await Chair.create(req.body)
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
+})
+router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
+  try {
+    const chairInstance = await Chair.findByPk(req.params.chairId)
+    const data = await chairInstance.update(req.body)
+    console.log('WHAT IS MY DATA IN PUT', data)
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
+})
+// router.delete('/:id', isAdminMiddleware, (req, res, next) => {
+//   req.requestedChair
+//     .destroy()
+//     .then(() => {
+//       res.status(204).end()
+//     })
+//     .catch(next)
+// })
+router.delete('/:chairId', isAdminMiddleware, async (req, res, next) => {
+  try {
+    Chair.destroy({
+      where: {
+        id: req.params.chairId
+      }
     })
-    .catch(next)
+    res.status(204).send()
+  } catch (error) {
+    next(error)
+  }
 })
