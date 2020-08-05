@@ -16,14 +16,33 @@ const isAdminOrProperUserMiddleware = (req, res, next) => {
   }
 }
 router.get(
-  '/:userId/isFulfilled/:isFulfilled',
+  // this route is for the initial population of cart when a user logs in
+  '/:userId/',
+  isAdminOrProperUserMiddleware,
+  async (req, res, next) => {
+    try {
+      const [orders, orderCreated] = await Order.findOrCreate({
+        where: {
+          userId: req.params.userId,
+          isFulfilled: 0 // 0 is unfulfilled, 1 is fulfilled
+        }
+      })
+      res.json(orders)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+router.get(
+  // order history route
+  '/:userId/History/',
   isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
       const orders = await Order.findAll({
         where: {
           userId: req.params.userId,
-          isFulfilled: req.params.isFulfilled
+          isFulfilled: 1
         }
       })
       // check if admin or correct user //
