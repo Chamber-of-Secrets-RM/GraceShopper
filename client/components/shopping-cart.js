@@ -2,12 +2,16 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
 import fetchOrder from '../store/order'
+import deleteItem from '../store/order'
 
 /**
  * COMPONENT
  */
 
 class ShoppingCart extends Component {
+  async componentDidMount() {
+    this.props.fetchOrder(this.props.user.id)
+  }
   render() {
     //These are not real products
     console.log('this.props:', this.props)
@@ -50,13 +54,15 @@ class ShoppingCart extends Component {
 
 const mapState = state => {
   return {
-    userId: state.user.id
+    user: state.user.user,
+    cartInfo: state.order
   }
 }
 const mapDispatch = dispatch => {
   return {
-    loadOrder: userId => dispatch(fetchOrder(userId))
+    fetchOrder: userId => dispatch(fetchOrder(userId)),
+    deleteItem: (orderId, productId) => dispatch(deleteItem(orderId, productId))
   }
 }
 
-export default connect(mapState, null)(ShoppingCart)
+export default connect(mapState, mapDispatch)(ShoppingCart)

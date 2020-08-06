@@ -43,7 +43,11 @@ export const addToOrder = (product, quantity) => {
 export function fetchOrder(userId) {
   return async function(dispatch) {
     try {
-      const {data: order} = await axios.get(`/api/user/${userId}/currentOrder`)
+      const {data} = await axios.get(`/api/order/user/${userId}`)
+      console.log(
+        'WHAT IS ORDER IN FETCH ORDER MADE IT BEFORE SET ORDER ACTION',
+        data.order
+      )
       dispatch(setOrder(order))
     } catch (err) {
       console.error(err)
@@ -93,8 +97,11 @@ const initialState = []
 
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_ORDER:
+    case SET_ORDER: {
+      console.log('inside of set order action')
       return action.order
+    }
+
     case REMOVE_ITEM:
       return state.order.filter(product => product.id !== action.productId)
     case UPDATE_QUANTITY:
