@@ -91,7 +91,11 @@ export default function(state = defaultUser, action) {
     case GET_USER:
       return {...state, user: action.user, cart: {}}
     case GET_USER_AND_CART:
-      return {...state, user: action.userInfo.user, cart: action.userInfo.cart}
+      return {
+        ...state,
+        user: action.userInfo.user,
+        cart: action.userInfo.cart.data
+      }
     case REMOVE_USER:
       return defaultUser
     default:

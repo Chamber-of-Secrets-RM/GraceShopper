@@ -9,6 +9,9 @@ import deleteItem from '../store/order'
  */
 
 class ShoppingCart extends Component {
+  async componentDidMount() {
+    this.props.fetchOrder(this.props.user.id)
+  }
   render() {
     //These are not real products
     console.log('this.props:', this.props)
@@ -51,12 +54,13 @@ class ShoppingCart extends Component {
 
 const mapState = state => {
   return {
-    userId: state.user.id
+    user: state.user.user,
+    cartInfo: state.order
   }
 }
 const mapDispatch = dispatch => {
   return {
-    loadOrder: userId => dispatch(fetchOrder(userId)),
+    fetchOrder: userId => dispatch(fetchOrder(userId)),
     deleteItem: (orderId, productId) => dispatch(deleteItem(orderId, productId))
   }
 }
