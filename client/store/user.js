@@ -6,10 +6,13 @@ import history from '../history'
  */
 const GET_USER_AND_CART = 'GET_USER_AND_CART'
 const REMOVE_USER = 'REMOVE_USER'
+const GET_USER = 'GET_USER'
 
 /**
  * ACTION CREATORS
  */
+const getUser = user => ({type: GET_USER, user})
+
 const getUserAndCart = (user, cart) => {
   let userInfo = {
     user: user,
@@ -20,7 +23,6 @@ const getUserAndCart = (user, cart) => {
     userInfo: userInfo
   }
 }
-
 const removeUser = () => ({type: REMOVE_USER})
 
 /**
@@ -36,7 +38,9 @@ export const me = () => async dispatch => {
 }
 export const getEmptyCartAndUser = data => async dispatch => {
   try {
-    let cart = await axios.get(`/api/order/user/${data.userId}`)
+    console.log('What is data $#%#$%#$%#$^#$^#$&#$&', data)
+    let cart = await axios.get(`/api/order/user/${data.id}`)
+    console.log('what is cart')
     dispatch(getUserAndCart(data, cart))
   } catch (err) {
     console.log('error in getting empty cart')
@@ -84,6 +88,8 @@ const defaultUser = {
 
 export default function(state = defaultUser, action) {
   switch (action.type) {
+    case GET_USER:
+      return {...state, user: action.user, cart: {}}
     case GET_USER_AND_CART:
       return {...state, user: action.userInfo.user, cart: action.userInfo.cart}
     case REMOVE_USER:
