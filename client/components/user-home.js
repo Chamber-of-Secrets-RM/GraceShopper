@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import fetchOrder from '../store/order'
+
 /**
  * COMPONENT
  */
@@ -27,11 +27,7 @@ const mapState = state => {
     email: state.user.email
   }
 }
-const mapDispatchtoProps = dispatch => {
-  return {
-    fetchOrder: userId => dispatch(fetchOrder(userId))
-  }
-}
+
 export default connect(mapState)(UserHome)
 
 /**

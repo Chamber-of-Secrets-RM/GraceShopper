@@ -4,18 +4,23 @@ import history from '../history'
 /**
  * ACTION TYPES
  */
-const GET_USER = 'GET_USER'
+const GET_USER_AND_CART = 'GET_USER_AND_CART'
 const REMOVE_USER = 'REMOVE_USER'
-
-/**
- * INITIAL STATE
- */
-const defaultUser = {}
 
 /**
  * ACTION CREATORS
  */
-const getUser = user => ({type: GET_USER, user})
+const getUserAndCart = (user, cart) => {
+  let userInfo = {
+    user: user,
+    cart: cart
+  }
+  return {
+    type: GET_USER_AND_CART,
+    userInfo: userInfo
+  }
+}
+
 const removeUser = () => ({type: REMOVE_USER})
 
 /**
@@ -29,17 +34,26 @@ export const me = () => async dispatch => {
     console.error(err)
   }
 }
+export const getEmptyCartAndUser = data => async dispatch => {
+  try {
+    let cart = await axios.get(`/api/order/user/${data.userId}`)
+    dispatch(getUserAndCart(data, cart))
+  } catch (err) {
+    console.log('error in getting empty cart')
+  }
+}
 
 export const auth = (email, password, method) => async dispatch => {
   let res
   try {
     res = await axios.post(`/auth/${method}`, {email, password})
   } catch (authError) {
-    return dispatch(getUser({error: authError}))
+    // return dispatch(getUser({error: authError}))
+    console.log('ERROR IN AUTH')
   }
 
   try {
-    dispatch(getUser(res.data))
+    dispatch(getEmptyCartAndUser(res.data))
     history.push('/home')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)
@@ -59,10 +73,19 @@ export const logout = () => async dispatch => {
 /**
  * REDUCER
  */
+
+/**
+ * INITIAL STATE
+ */
+const defaultUser = {
+  user: {},
+  cart: {}
+}
+
 export default function(state = defaultUser, action) {
   switch (action.type) {
-    case GET_USER:
-      return action.user
+    case GET_USER_AND_CART:
+      return {...state, user: action.userInfo.user, cart: action.userInfo.cart}
     case REMOVE_USER:
       return defaultUser
     default:
