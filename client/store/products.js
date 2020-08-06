@@ -17,10 +17,11 @@ export const setProducts = products => ({
  */
 
 export function fetchProducts() {
+  console.log('im in fetchProducts')
   return async function(dispatch) {
     try {
-      // const {data: products} = await axios.get('/api/chair')
-      // dispatch(setProducts(products))
+      const {data: products} = await axios.get('/api/chair')
+      dispatch(setProducts(products))
     } catch (err) {
       console.error(err)
     }
@@ -31,33 +32,7 @@ export function fetchProducts() {
  * Reducer
  */
 
-const initialState = [
-  {
-    id: 1,
-    name: 'Red Chair',
-    price: 99
-  },
-  {
-    id: 2,
-    name: 'Yellow Chair',
-    price: 77
-  },
-  {
-    id: 3,
-    name: 'Blue Chair',
-    price: 55
-  },
-  {
-    id: 4,
-    name: 'Green Chair',
-    price: 33
-  },
-  {
-    id: 5,
-    name: 'Purple Chair',
-    price: 11
-  }
-]
+const initialState = []
 
 export default function productsReducer(state = initialState, action) {
   switch (action.type) {
