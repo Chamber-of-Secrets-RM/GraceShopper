@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {postToOrder} from '../store/order'
+import {postToOrder, putToOrder} from '../store/order'
 /**
  * COMPONENT
  */
@@ -25,11 +25,26 @@ class SingleItem extends Component {
     // if (!this.props.order) {}
 
     // FIRST PARAMETER IS THE ORDER ID
-    this.props.postToOrder(
-      this.props.singleProduct,
-      this.props.user.user.id,
-      this.state.quantity
-    )
+    let duplicateCheck = false
+    for (let i = 0; i < this.props.order.length; i++) {
+      let curr = this.props.order[i]
+      if (curr.id === this.props.singleProduct.id) {
+        duplicateCheck = true
+      }
+    }
+    if (!duplicateCheck) {
+      this.props.postToOrder(
+        this.props.singleProduct,
+        this.props.user.user.id,
+        this.state.quantity
+      )
+    } else {
+      this.props.putToOrder(
+        this.props.singleProduct,
+        this.props.user.user.id,
+        this.state.quantity
+      )
+    }
   }
   render() {
     const {singleProduct} = this.props
@@ -75,7 +90,9 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     postToOrder: (orderId, product, quantity) =>
-      dispatch(postToOrder(orderId, product, quantity))
+      dispatch(postToOrder(orderId, product, quantity)),
+    putToOrder: (orderId, product, quantity) =>
+      dispatch(putToOrder(orderId, product, quantity))
   }
 }
 

@@ -62,18 +62,18 @@ export function deleteItem(orderId, productId) {
     }
   }
 }
-export function changeQuantity(orderId, productId, quantity) {
-  return async function(dispatch) {
-    try {
-      await axios.put(`/api/order/${orderId}/chair/${productId}`, {
-        quantity: quantity
-      })
-      dispatch(updateQuantity(productId, quantity))
-    } catch (err) {
-      console.error(err)
-    }
-  }
-}
+// export function changeQuantity(orderId, productId, quantity) {
+//   return async function (dispatch) {
+//     try {
+//       await axios.put(`/api/order/${orderId}/chair/${productId}`, {
+//         quantity: quantity,
+//       })
+//       dispatch(updateQuantity(productId, quantity))
+//     } catch (err) {
+//       console.error(err)
+//     }
+//   }
+// }
 export function postToOrder(product, userId, quantity) {
   return async function(dispatch) {
     try {
@@ -89,7 +89,21 @@ export function postToOrder(product, userId, quantity) {
     }
   }
 }
-
+export function putToOrder(product, userId, quantity) {
+  return async function(dispatch) {
+    try {
+      const {data} = await axios.put(
+        `/api/order/user/${userId}/chair/${product.id}`,
+        {
+          quantity: quantity
+        }
+      )
+      dispatch(addToOrder(data))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
 /*
  * Reducer
  */
@@ -114,7 +128,9 @@ export default function orderReducer(state = initialState, action) {
       })
     case ADD_TO_ORDER: {
       console.log('INSIDE ADD_TO_ORDER REDUCER', action.productData)
-      return [...state, action.productData]
+      let newArr = state.filter(product => product.id !== action.productData.id)
+      newArr.push(action.productData)
+      return newArr
     }
 
     default:
