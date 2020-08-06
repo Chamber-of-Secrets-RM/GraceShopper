@@ -9,13 +9,14 @@ const isAdminMiddleware = (req, res, next) => {
     next()
   } else {
     const error = new Error(
-      'You are not allowed to do this the authorities have been notified'
+      'You are not allowed to do this. The authorities have been notified.'
     )
     error.status = 401
     next(error)
   }
 }
 
+//  api/chairs/ => Gets ALL chairs
 router.get('/', async (req, res, next) => {
   try {
     const chairs = await Chair.findAll({})
@@ -24,9 +25,11 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+// api/chairs/:chair Id => Gets single chair by Id
 router.get('/:chairId', async (req, res, next) => {
   try {
-    const data = await Cart.findOne({
+    const data = await Chair.findOne({
       where: {
         id: req.params.chairId
       }
@@ -37,6 +40,7 @@ router.get('/:chairId', async (req, res, next) => {
   }
 })
 
+//  api/chairs/ => Creates new chair in Chair model
 router.post('/', isAdminMiddleware, async (req, res, next) => {
   try {
     const data = await Chair.create(req.body)
@@ -45,6 +49,8 @@ router.post('/', isAdminMiddleware, async (req, res, next) => {
     next(error)
   }
 })
+
+// api/chairs/:chairId => Update single chair with given parameters
 router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
   try {
     const chairInstance = await Chair.findByPk(req.params.chairId)
@@ -63,6 +69,8 @@ router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
 //     })
 //     .catch(next)
 // })
+
+// api/chairs/:chairId => Deletes chair from Chair model in db
 router.delete('/:chairId', isAdminMiddleware, async (req, res, next) => {
   try {
     Chair.destroy({
@@ -70,7 +78,7 @@ router.delete('/:chairId', isAdminMiddleware, async (req, res, next) => {
         id: req.params.chairId
       }
     })
-    res.status(204).send()
+    res.status(204).send('Chair deleted')
   } catch (error) {
     next(error)
   }

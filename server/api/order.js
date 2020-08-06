@@ -1,8 +1,11 @@
 const router = require('express').Router()
-const {Order, OrdersChairs} = require('../db/models')
+const {Order, OrdersChairs, Chair} = require('../db/models')
 
 module.exports = router
 
+
+
+=======
 // const isAdminOrProperUserMiddleware = (req, res, next) => {
 //   const currentUser = req.session.user
 //   // needs to be tested to see how to test for user//
@@ -19,6 +22,7 @@ module.exports = router
 router.get(
   // this route is for the initial population of cart when a user logs in
   '/user/:userId/',
+
   async (req, res, next) => {
     try {
       console.log('what is Order', Order)
@@ -26,6 +30,9 @@ router.get(
         where: {
           userId: req.params.userId,
           isFulfilled: 0 // 0 is unfulfilled, 1 is fulfilled
+        },
+        include: {
+          model: Chair
         }
       })
       res.json(orders)
@@ -34,9 +41,13 @@ router.get(
     }
   }
 )
+
 router.get(
   // order history route
-  '/:userId/History/',
+
+  '/user/:userId/History/',
+=======
+
   // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
@@ -44,6 +55,9 @@ router.get(
         where: {
           userId: req.params.userId,
           isFulfilled: 1
+        },
+        include: {
+          model: Chair
         }
       })
       // check if admin or correct user //
@@ -54,28 +68,35 @@ router.get(
   }
 )
 // This route gives all the info you need for what is in your cart/Checking out
-router.get(
-  '/:orderId',
-  // isAdminOrProperUserMiddleware,
-  async (req, res, next) => {
-    try {
-      const data = await OrdersChairs.findAll({
-        where: {
-          orderId: req.params.orderId
-        }
-      })
-      res.json(data)
-    } catch (error) {
-      next(error)
-    }
-  }
-)
-router.post('/:orderId/chair/:chairId/', async (req, res, next) => {
+
+// needs to be reviewed
+// router.get(
+//   '/:orderId',
+//   // isAdminOrProperUserMiddleware,
+//   async (req, res, next) => {
+//     try {
+//       const data = await OrdersChairs.findAll({
+//         where: {
+//           orderId: req.params.orderId
+//         }
+//       })
+//       res.json(data)
+//     } catch (error) {
+//       next(error)
+//     }
+//   }
+// )
+
+//Adds new item to the current user's order/cart; calculates price based on quantity on backend
+//to avoid bypassing prices defined on front end.
+router.post('/user/:userId/chair/:chairId/', async (req, res, next) => {
+
+
   try {
-    const userOrderInstance = await Order.findAll({
+    const [userOrderInstance] = await Order.findAll({
       where: {
-        userId: req.user.id,
-        id: req.params.orderId
+        userId: req.params.userId,
+        isFulfilled: 0 // 0 is unfulfilled, 1 is fulfilled
       }
     })
     if (!userOrderInstance) {
@@ -83,57 +104,59 @@ router.post('/:orderId/chair/:chairId/', async (req, res, next) => {
       next(err) // needs to be tested, how are we going to throw custom error
       /// Could just check req.session instead of lines 69-78
     }
+    const currentChair = await Chair.findByPk(req.params.chairId)
     const data = await OrdersChairs.create({
-      where: {
-        orderId: req.params.orderId,
-        chairId: req.params.chairId,
-        quantity: req.body.quantity,
-        itemTotal: req.body.itemTotal
-      }
+      orderId: userOrderInstance.id,
+      chairId: req.params.chairId,
+      quantity: req.body.quantity,
+      itemTotal: currentChair.price * req.body.quantity
     })
     res.json(data)
   } catch (error) {
     next(error)
   }
 })
-///     /api/order/:orderId/chair/:chairId/quantity/:quantity
-router.put(
-  '/:orderId/chair/:chairId/quantity/:quantity',
-  async (err, req, res, next) => {
-    try {
-      const userOrderInstance = await Order.findAll({
-        where: {
-          userId: req.user.id,
-          id: req.params.orderId
-        }
-      })
-      if (!userOrderInstance) {
-        err.message = 'this was a bad user'
-        next(err) // needs to be tested, how are we going to throw custom error
-      }
-      const data = await OrdersChairs.update(
-        {
-          quantity: req.params.quantity
-        },
-        {
-          where: {
-            orderId: req.params.orderId,
-            chairId: req.params.chairId
-          }
-        }
-      )
-      res.json(data)
-    } catch (error) {
-      next(error)
-    }
-  }
-)
-router.delete('/:orderId/chair/:chairId/', async (req, res, next) => {
+
+///     api/orders/user/:userId/chair/:chairId/'
+
+//Need to check order on front end to make sure chair is in the order/cart
+router.put('/user/:userId/chair/:chairId/', async (req, res, next) => {
   try {
-    const userOrderInstance = await Order.findAll({
+    const [userOrderInstance] = await Order.findAll({
       where: {
-        userId: req.user.id,
-        id: req.params.orderId
+        userId: req.params.userId,
+        isFulfilled: 0 // 0 is unfulfilled, 1 is fulfilled
+      }
+    })
+    if (!userOrderInstance) {
+      err.message = 'this was a bad user'
+      next(err) // needs to be tested, how are we going to throw custom error
+    }
+    const currentChair = await Chair.findByPk(req.params.chairId)
+    const data = await OrdersChairs.update(
+      {
+        quantity: req.body.quantity,
+        itemTotal: currentChair.price * req.body.quantity
+      },
+      {
+        where: {
+          orderId: userOrderInstance.id,
+          chairId: req.params.chairId
+        }
+      }
+    )
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.delete('/user/:userId/chair/:chairId/', async (req, res, next) => {
+  try {
+    const [userOrderInstance] = await Order.findAll({
+      where: {
+        userId: req.params.userId,
+        isFulfilled: 0 // 0 is unfulfilled, 1 is fulfilled
       }
     })
     if (!userOrderInstance) {
@@ -143,7 +166,7 @@ router.delete('/:orderId/chair/:chairId/', async (req, res, next) => {
     OrdersChairs.destroy({
       where: {
         chairId: req.params.chairId,
-        orderId: req.params.orderId
+        orderId: userOrderInstance.id
       }
     })
     res.status(204).send()
@@ -152,26 +175,29 @@ router.delete('/:orderId/chair/:chairId/', async (req, res, next) => {
   }
 })
 
-router.put(
-  '/:orderId',
-  // isAdminOrProperUserMiddleware,
-  async (req, res, next) => {
-    try {
-      const orderInstance = await Order.findByPk(req.params.orderId)
-      if (req.user.id == orderInstance.userId) {
-        // needs to be tested, unsure of left variable
-        // this is the route we might use for changing isFulfilled
 
-        const data = await orderInstance.update(req.body)
-        res.json(data)
-      } else {
-        throw new Error('Not the right user')
-      }
-    } catch (error) {
-      next(error)
-    }
-  }
-)
+// router.put(
+//   '/:orderId',
+//   isAdminOrProperUserMiddleware,
+//   async (req, res, next) => {
+//     try {
+//       const orderInstance = await Order.findByPk(req.params.orderId)
+//       if (req.user.id == orderInstance.userId) {
+//         // needs to be tested, unsure of left variable
+//         // this is the route we might use for changing isFulfilled
+
+
+
+//         const data = await orderInstance.update(req.body)
+//         res.json(data)
+//       } else {
+//         throw new Error('Not the right user')
+//       }
+//     } catch (error) {
+//       next(error)
+//     }
+//   }
+// )
 
 router.post(
   '/',
