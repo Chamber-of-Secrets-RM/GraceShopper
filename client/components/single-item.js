@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {postToOrder} from '../store/order'
+import {postToOrder, putToOrder} from '../store/order'
 /**
  * COMPONENT
  */
@@ -21,13 +21,33 @@ class SingleItem extends Component {
   }
   handleSubmit(event) {
     event.preventDefault()
-    console.log('event target:', event.target)
+
     // if (!this.props.order) {}
-    this.props.addToCart(1, this.props.singleProduct, this.state.quantity)
+
+    // FIRST PARAMETER IS THE ORDER ID
+    let duplicateCheck = false
+    for (let i = 0; i < this.props.order.length; i++) {
+      let curr = this.props.order[i]
+      if (curr.id === this.props.singleProduct.id) {
+        duplicateCheck = true
+      }
+    }
+    if (!duplicateCheck) {
+      this.props.postToOrder(
+        this.props.singleProduct,
+        this.props.user.user.id,
+        this.state.quantity
+      )
+    } else {
+      this.props.putToOrder(
+        this.props.singleProduct,
+        this.props.user.user.id,
+        this.state.quantity
+      )
+    }
   }
   render() {
     const {singleProduct} = this.props
-    console.log('props:', this.props)
 
     if (singleProduct && singleProduct.id) {
       return (
@@ -62,14 +82,17 @@ class SingleItem extends Component {
 const mapState = state => {
   return {
     singleProduct: state.singleProduct,
-    order: state.order
+    order: state.order,
+    user: state.user
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    addToCart: (orderId, product, quantity) =>
-      dispatch(postToOrder(orderId, product, quantity))
+    postToOrder: (orderId, product, quantity) =>
+      dispatch(postToOrder(orderId, product, quantity)),
+    putToOrder: (orderId, product, quantity) =>
+      dispatch(putToOrder(orderId, product, quantity))
   }
 }
 
