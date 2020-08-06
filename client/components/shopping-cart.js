@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
-import fetchOrder from '../store/order'
-import deleteItem from '../store/order'
+import {fetchOrder} from '../store/order'
+import {deleteItem} from '../store/order'
 
 /**
  * COMPONENT
@@ -10,6 +10,7 @@ import deleteItem from '../store/order'
 
 class ShoppingCart extends Component {
   async componentDidMount() {
+    console.log('inside shoppingCar CDM', this.props)
     this.props.fetchOrder(this.props.user.id)
   }
   render() {

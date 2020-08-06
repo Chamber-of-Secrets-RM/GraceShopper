@@ -44,11 +44,8 @@ export function fetchOrder(userId) {
   return async function(dispatch) {
     try {
       const {data} = await axios.get(`/api/order/user/${userId}`)
-      console.log(
-        'WHAT IS ORDER IN FETCH ORDER MADE IT BEFORE SET ORDER ACTION',
-        data.order
-      )
-      dispatch(setOrder(order))
+      console.log('@#$@#$#@%#@%@#%@#^#@^@#^#@^@#^&', data.chairs)
+      dispatch(setOrder(data.chairs))
     } catch (err) {
       console.error(err)
     }
