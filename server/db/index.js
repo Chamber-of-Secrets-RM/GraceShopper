@@ -16,8 +16,7 @@ Order.belongsTo(User)
 // register models
 require('./models')
 
+// other models being exported through /models/index
 module.exports = {
   db
-  // Chair,
-  // User,
 }
