@@ -126,20 +126,25 @@ router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
       err.message = 'this was a bad user'
       next(err) // needs to be tested, how are we going to throw custom error
     }
+    console.log('WHAT IS URDERORDERID', userOrderInstance.id)
+    console.log('WHAT IS chairId', req.params.chairId)
     const currentChair = await Chair.findByPk(req.params.chairId)
-    const data = await OrdersChairs.update(
+    const [numUpdated, affectedRows] = await OrdersChairs.update(
       {
-        quantity: req.body.quantity,
-        itemTotal: currentChair.price * req.body.quantity
+        quantity: req.body.quantity
+        // itemTotal: currentChair.price * req.body.quantity
       },
       {
         where: {
           orderId: userOrderInstance.id,
           chairId: req.params.chairId
-        }
+        },
+        returning: true
       }
     )
-    res.json(data)
+    console.log('WHAT IS NUMUPDATED', numUpdated)
+    console.log('WHAT IS DATA ON THE BACKEND fOR PUT', affectedRows)
+    res.json(affectedRows[0])
   } catch (error) {
     next(error)
   }
