@@ -28,11 +28,12 @@ export const updateQuantity = (productId, quantity) => {
     quantity
   }
 }
-export const addToOrder = (product, quantity) => {
-  product.quantity = quantity
+export const addToOrder = productData => {
+  console.log('WHAT IS PRODUCT IN ADD TO ORDER ACTION', productData)
+
   return {
     type: ADD_TO_ORDER,
-    product
+    productData
   }
 }
 
@@ -44,11 +45,8 @@ export function fetchOrder(userId) {
   return async function(dispatch) {
     try {
       const {data} = await axios.get(`/api/order/user/${userId}`)
-      console.log(
-        'WHAT IS ORDER IN FETCH ORDER MADE IT BEFORE SET ORDER ACTION',
-        data.order
-      )
-      dispatch(setOrder(order))
+      console.log('@#$@#$#@%#@%@#%@#^#@^@#^#@^@#^&', data.chairs)
+      dispatch(setOrder(data.chairs))
     } catch (err) {
       console.error(err)
     }
@@ -64,31 +62,48 @@ export function deleteItem(orderId, productId) {
     }
   }
 }
-export function changeQuantity(orderId, productId, quantity) {
+// export function changeQuantity(orderId, productId, quantity) {
+//   return async function (dispatch) {
+//     try {
+//       await axios.put(`/api/order/${orderId}/chair/${productId}`, {
+//         quantity: quantity,
+//       })
+//       dispatch(updateQuantity(productId, quantity))
+//     } catch (err) {
+//       console.error(err)
+//     }
+//   }
+// }
+export function postToOrder(product, userId, quantity) {
   return async function(dispatch) {
     try {
-      await axios.put(`/api/order/${orderId}/chair/${productId}`, {
-        quantity: quantity
-      })
-      dispatch(updateQuantity(productId, quantity))
+      const {data} = await axios.post(
+        `/api/order/user/${userId}/chair/${product.id}`,
+        {
+          quantity: quantity
+        }
+      )
+      dispatch(addToOrder(data))
     } catch (err) {
       console.error(err)
     }
   }
 }
-export function postToOrder(orderId, product, quantity) {
+export function putToOrder(product, userId, quantity) {
   return async function(dispatch) {
     try {
-      // await axios.post(`/api/order/${orderId}/chair/${product.id}`,{
-      //   quantity: quantity
-      // })
-      dispatch(addToOrder(product, quantity))
+      const {data} = await axios.put(
+        `/api/order/user/${userId}/chair/${product.id}`,
+        {
+          quantity: quantity
+        }
+      )
+      dispatch(addToOrder(data))
     } catch (err) {
       console.error(err)
     }
   }
 }
-
 /*
  * Reducer
  */
@@ -111,8 +126,13 @@ export default function orderReducer(state = initialState, action) {
         }
         return product
       })
-    case ADD_TO_ORDER:
-      return [...state, action.product]
+    case ADD_TO_ORDER: {
+      console.log('INSIDE ADD_TO_ORDER REDUCER', action.productData)
+      let newArr = state.filter(product => product.id !== action.productData.id)
+      newArr.push(action.productData)
+      return newArr
+    }
+
     default:
       return state
   }

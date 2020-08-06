@@ -3,9 +3,6 @@ const {Order, OrdersChairs, Chair} = require('../db/models')
 
 module.exports = router
 
-
-
-=======
 // const isAdminOrProperUserMiddleware = (req, res, next) => {
 //   const currentUser = req.session.user
 //   // needs to be tested to see how to test for user//
@@ -46,7 +43,6 @@ router.get(
   // order history route
 
   '/user/:userId/History/',
-=======
 
   // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
@@ -89,9 +85,7 @@ router.get(
 
 //Adds new item to the current user's order/cart; calculates price based on quantity on backend
 //to avoid bypassing prices defined on front end.
-router.post('/user/:userId/chair/:chairId/', async (req, res, next) => {
-
-
+router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
     const [userOrderInstance] = await Order.findAll({
       where: {
@@ -120,7 +114,7 @@ router.post('/user/:userId/chair/:chairId/', async (req, res, next) => {
 ///     api/orders/user/:userId/chair/:chairId/'
 
 //Need to check order on front end to make sure chair is in the order/cart
-router.put('/user/:userId/chair/:chairId/', async (req, res, next) => {
+router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
     const [userOrderInstance] = await Order.findAll({
       where: {
@@ -175,7 +169,6 @@ router.delete('/user/:userId/chair/:chairId/', async (req, res, next) => {
   }
 })
 
-
 // router.put(
 //   '/:orderId',
 //   isAdminOrProperUserMiddleware,
@@ -185,8 +178,6 @@ router.delete('/user/:userId/chair/:chairId/', async (req, res, next) => {
 //       if (req.user.id == orderInstance.userId) {
 //         // needs to be tested, unsure of left variable
 //         // this is the route we might use for changing isFulfilled
-
-
 
 //         const data = await orderInstance.update(req.body)
 //         res.json(data)
