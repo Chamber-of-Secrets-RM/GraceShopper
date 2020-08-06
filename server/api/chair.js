@@ -16,7 +16,7 @@ const isAdminMiddleware = (req, res, next) => {
   }
 }
 
-//  api/chairs/ => Gets ALL chairs
+//  api/chair/ => Gets ALL chairs
 router.get('/', async (req, res, next) => {
   try {
     const chairs = await Chair.findAll({})

@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import ProductElement from './ProductElement'
+import {fetchProducts} from '../store/products'
 
 /**
  * COMPONENT
@@ -10,9 +11,11 @@ class AllProducts extends React.Component {
   constructor() {
     super()
   }
+
   componentDidMount() {
-    //add to redux store
+    this.props.getChairs()
   }
+
   render() {
     const {products} = this.props
     return (
@@ -38,7 +41,9 @@ const mapState = state => {
 }
 
 const mapDispatch = dispatch => {
-  return {}
+  return {
+    getChairs: () => dispatch(fetchProducts())
+  }
 }
 
-export default connect(mapState, null)(AllProducts)
+export default connect(mapState, mapDispatch)(AllProducts)

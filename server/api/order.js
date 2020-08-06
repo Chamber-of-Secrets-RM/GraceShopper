@@ -19,7 +19,7 @@ module.exports = router
 router.get(
   // this route is for the initial population of cart when a user logs in
   '/user/:userId/',
-
+  // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
       console.log('what is Order', Order)
