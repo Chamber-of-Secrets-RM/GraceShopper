@@ -1,9 +1,13 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-
 /**
  * COMPONENT
  */
+
+function onSubmit() {
+  event.preventDefault()
+  this.props.deleteItem(this.props.order.id, this.props.singleProduct.id)
+}
 export default function CheckoutElement(props) {
   const {product} = props
   return (
@@ -18,7 +22,7 @@ export default function CheckoutElement(props) {
           <div>{product.name}</div>
         </Link>
         <div>Qty:{product.quantity}</div>
-        <button>Remove from cart</button>
+        {/* <button onClick={}>Remove from cart</button> */}
         <div>Price:{product.price * product.quantity}</div>
       </div>
     </div>

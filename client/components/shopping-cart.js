@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
 import fetchOrder from '../store/order'
+import deleteItem from '../store/order'
 
 /**
  * COMPONENT
@@ -55,8 +56,9 @@ const mapState = state => {
 }
 const mapDispatch = dispatch => {
   return {
-    loadOrder: userId => dispatch(fetchOrder(userId))
+    loadOrder: userId => dispatch(fetchOrder(userId)),
+    deleteItem: (orderId, productId) => dispatch(deleteItem(orderId, productId))
   }
 }
 
-export default connect(mapState, null)(ShoppingCart)
+export default connect(mapState, mapDispatch)(ShoppingCart)

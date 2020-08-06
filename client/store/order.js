@@ -43,7 +43,7 @@ export const addToOrder = (product, quantity) => {
 export function fetchOrder(userId) {
   return async function(dispatch) {
     try {
-      const {data: order} = await axios.get(`/api/user/${userId}/currentOrder`)
+      const {data: order} = await axios.get(`/api/order/user/${userId}`)
       dispatch(setOrder(order))
     } catch (err) {
       console.error(err)

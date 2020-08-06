@@ -18,7 +18,7 @@ const isAdminOrProperUserMiddleware = (req, res, next) => {
 }
 router.get(
   // this route is for the initial population of cart when a user logs in
-  '/:userId/',
+  'user/:userId/',
   isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
