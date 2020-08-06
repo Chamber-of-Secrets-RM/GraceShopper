@@ -1,27 +1,27 @@
 const router = require('express').Router()
-const {Order, OrdersChairs} = require('../db/models')
+const {Order} = require('../db/models')
 
 module.exports = router
 
-const isAdminOrProperUserMiddleware = (req, res, next) => {
-  const currentUser = req.session.user
-  // needs to be tested to see how to test for user//
-  if (currentUser || currentUser.isAdmin) {
-    next()
-  } else {
-    const error = new Error(
-      'You are not allowed to do this the authorities have been notified'
-    )
-    error.status = 401
-    next(error)
-  }
-}
+// const isAdminOrProperUserMiddleware = (req, res, next) => {
+//   const currentUser = req.session.user
+//   // needs to be tested to see how to test for user//
+//   if (currentUser || currentUser.isAdmin) {
+//     next()
+//   } else {
+//     const error = new Error(
+//       'You are not allowed to do this the authorities have been notified'
+//     )
+//     error.status = 401
+//     next(error)
+//   }
+// }
 router.get(
   // this route is for the initial population of cart when a user logs in
   '/user/:userId/',
-  isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
+      console.log('what is Order', Order)
       const [orders, orderCreated] = await Order.findOrCreate({
         where: {
           userId: req.params.userId,
@@ -37,7 +37,7 @@ router.get(
 router.get(
   // order history route
   '/:userId/History/',
-  isAdminOrProperUserMiddleware,
+  // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
       const orders = await Order.findAll({
@@ -56,7 +56,7 @@ router.get(
 // This route gives all the info you need for what is in your cart/Checking out
 router.get(
   '/:orderId',
-  isAdminOrProperUserMiddleware,
+  // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
       const data = await OrdersChairs.findAll({
@@ -154,7 +154,7 @@ router.delete('/:orderId/chair/:chairId/', async (req, res, next) => {
 
 router.put(
   '/:orderId',
-  isAdminOrProperUserMiddleware,
+  // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
       const orderInstance = await Order.findByPk(req.params.orderId)
@@ -173,11 +173,14 @@ router.put(
   }
 )
 
-router.post('/', isAdminOrProperUserMiddleware, async (req, res, next) => {
-  try {
-    const data = await Order.create(req.body)
-    res.json(data)
-  } catch (error) {
-    next(error)
+router.post(
+  '/',
+  /*isAdminOrProperUserMiddleware,*/ async (req, res, next) => {
+    try {
+      const data = await Order.create(req.body)
+      res.json(data)
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
