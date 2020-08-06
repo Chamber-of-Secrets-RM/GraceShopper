@@ -28,11 +28,12 @@ export const updateQuantity = (productId, quantity) => {
     quantity
   }
 }
-export const addToOrder = (product, quantity) => {
-  product.quantity = quantity
+export const addToOrder = productData => {
+  console.log('WHAT IS PRODUCT IN ADD TO ORDER ACTION', productData)
+
   return {
     type: ADD_TO_ORDER,
-    product
+    productData
   }
 }
 
@@ -73,13 +74,16 @@ export function changeQuantity(orderId, productId, quantity) {
     }
   }
 }
-export function postToOrder(orderId, product, quantity) {
+export function postToOrder(product, userId, quantity) {
   return async function(dispatch) {
     try {
-      // await axios.post(`/api/order/${orderId}/chair/${product.id}`,{
-      //   quantity: quantity
-      // })
-      dispatch(addToOrder(product, quantity))
+      const {data} = await axios.post(
+        `/api/order/user/${userId}/chair/${product.id}`,
+        {
+          quantity: quantity
+        }
+      )
+      dispatch(addToOrder(data))
     } catch (err) {
       console.error(err)
     }
@@ -108,8 +112,11 @@ export default function orderReducer(state = initialState, action) {
         }
         return product
       })
-    case ADD_TO_ORDER:
-      return [...state, action.product]
+    case ADD_TO_ORDER: {
+      console.log('INSIDE ADD_TO_ORDER REDUCER', action.productData)
+      return [...state, action.productData]
+    }
+
     default:
       return state
   }
