@@ -10,8 +10,9 @@ export default function CheckoutElement(props) {
     event.preventDefault()
     props.deleteItem(orderId, chairId)
   }
-  console.log('PROPS IN CHECKOUT ELEMENT', product.ordersChairs.quantity)
-  if (!props) {
+  // console.log('PROPS IN CHECKOUT ELEMENT', product.ordersChairs.quantity)
+  if (!product.ordersChairs) {
+    console.log('what is product!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', product)
     return <div>hello</div>
   }
   return (
