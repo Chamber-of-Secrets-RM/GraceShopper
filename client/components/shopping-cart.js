@@ -18,9 +18,9 @@ class ShoppingCart extends Component {
     console.log('this.props:', this.props)
 
     // if this object is empty we know we are a guest
-    if (Object.keys(this.props.cart).length == 0) {
-      let guestOrder = localStorage.getItem('guestOrder')
-
+    if (Object.keys(this.props.cart).length === 0) {
+      let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
+      console.log(guestOrder)
       if (!guestOrder) {
         return <div>go buy some items</div>
       } else {

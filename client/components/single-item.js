@@ -26,23 +26,29 @@ class SingleItem extends Component {
   }
   handleSubmit(event) {
     event.preventDefault()
-
     // if the object is empty we know that we are a guest user
-    if (Object.keys(this.props.user.user).length == 0) {
+    console.log('this.props.user.user', this.props.user.user)
+    if (Object.keys(this.props.user.user.user).length === 0) {
       let newItem = {
         quantity: this.state.quantity,
         itemTotal: this.props.singleProduct.price * this.state.quantity,
         chairId: this.props.singleProduct.id
       }
+
       let currentGuestOrder = localStorage.getItem('guestOrder')
+
       // this block is for the case where nothing is in local storage yet
       if (!currentGuestOrder) {
         let newGuestOrder = []
-        newGuestOrder.push(newItem)
 
-        localStorage.setItem('guestOrder', newGuestOrder)
+        newGuestOrder.push(newItem)
+        let stringifiedOrder = JSON.stringify(newGuestOrder)
+        localStorage.setItem('guestOrder', stringifiedOrder)
       } else if (currentGuestOrder) {
-        currentGuestOrder.push(newItem)
+        let destringifiedOrder = JSON.parse(currentGuestOrder)
+        destringifiedOrder.push(newItem)
+        let stringifiedOrder = JSON.stringify(destringifiedOrder)
+        localStorage.setItem('guestOrder', stringifiedOrder)
       }
     } else {
       // this block is for logged in users
