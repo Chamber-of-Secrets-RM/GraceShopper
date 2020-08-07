@@ -17,10 +17,14 @@ import {fetchOrder} from './store/order'
  * COMPONENT
  */
 class Routes extends Component {
-  componentDidMount() {
-    this.props.loadInitialData()
+  async componentDidMount() {
+    try {
+      await this.props.loadInitialData()
+    } catch (err) {
+      console.error(err)
+    }
+    console.log('routes compoenentdidmount:', this.props)
   }
-
   render() {
     const {isLoggedIn} = this.props
 
