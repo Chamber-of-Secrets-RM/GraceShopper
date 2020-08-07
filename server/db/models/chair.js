@@ -11,12 +11,16 @@ const Chair = db.define('chair', {
   },
   imageUrl: {
     type: Sequelize.TEXT,
-    defaultValue: '/images/mars.png'
+    defaultValue: '/Images/chair_PNG6910.png'
   },
   price: {
     //need a function to get the 'float number'
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    get() {
+      const rawValue = this.dataValues.price
+      return rawValue ? rawValue / 100 : null
+    }
   },
   rating: {
     type: Sequelize.ENUM('1', '2', '3', '4', '5')

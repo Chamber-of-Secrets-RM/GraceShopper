@@ -17,7 +17,7 @@ export default function ProductElement(props) {
         <Link to={`/products/${product.id}`}>
           <div>{product.name}</div>
         </Link>
-        <div>{product.price}</div>
+        <div>${product.price}</div>
       </div>
     </div>
   )

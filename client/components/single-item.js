@@ -63,7 +63,7 @@ class SingleItem extends Component {
           <div>
             <img src={singleProduct.imageUrl} />
           </div>
-          <div>Price: {singleProduct.price}</div>
+          <div>Price: ${singleProduct.price}</div>
           <h1>
             <small>Description:</small>
           </h1>
