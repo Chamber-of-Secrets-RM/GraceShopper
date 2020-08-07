@@ -19,7 +19,7 @@ const Chair = db.define('chair', {
     allowNull: false,
     get() {
       const rawValue = this.dataValues.price
-      return rawValue ? rawValue / 100 : null
+      return rawValue / 100
     }
   },
   rating: {
