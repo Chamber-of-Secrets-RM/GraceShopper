@@ -10,7 +10,7 @@ function handleSubmit(orderId, chairId) {
 }
 export default function CheckoutElement(props) {
   const {product} = props
-  console.log('PROPS IN CHECKOUT ELEMENT', props)
+  console.log('PROPS IN CHECKOUT ELEMENT', product)
   return (
     <div className="checkout-element">
       <div>
@@ -22,15 +22,13 @@ export default function CheckoutElement(props) {
         <Link to={`/products/${product.id}`}>
           <div>{product.name}</div>
         </Link>
-        <div>Qty:{product.quantity}</div>
+        <div>Qty:{product.ordersChairs.quantity}</div>
         <button
-          onClick={() =>
-            handleSubmit(this.props.order.id, this.props.singleProduct.id)
-          }
+          onClick={() => handleSubmit(product.ordersChairs.orderId, product.id)}
         >
           Remove from cart
         </button>
-        <div>Price:{product.price * product.quantity}</div>
+        <div>Price:{product.price * product.ordersChairs.quantity}</div>
       </div>
     </div>
   )
