@@ -28,6 +28,8 @@ class SingleItem extends Component {
     let duplicateCheck = false
     for (let i = 0; i < this.props.order.length; i++) {
       let curr = this.props.order[i]
+      console.log('matching curr id', curr.id)
+      console.log('matching singleProduct id', this.props.singleProduct.id)
       if (curr.id === this.props.singleProduct.id) {
         duplicateCheck = true
       }

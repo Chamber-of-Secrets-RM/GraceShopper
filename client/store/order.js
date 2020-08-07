@@ -98,6 +98,7 @@ export function putToOrder(product, userId, quantity) {
           quantity: quantity
         }
       )
+      console.log('DATA FROM PUT AXIOS', data)
       dispatch(addToOrder(data))
     } catch (err) {
       console.error(err)
@@ -128,7 +129,11 @@ export default function orderReducer(state = initialState, action) {
       })
     case ADD_TO_ORDER: {
       console.log('INSIDE ADD_TO_ORDER REDUCER', action.productData)
-      let newArr = state.filter(product => product.id !== action.productData.id)
+      let newArr = state.filter(
+        product => product.id !== action.productData.chairId
+      )
+
+      console.log('NEW ARRAY INSIDE ADD_TO_ORDER', newArr)
       newArr.push(action.productData)
       return newArr
     }
