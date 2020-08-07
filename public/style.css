@@ -43,3 +43,13 @@ form div {
   display: flex;
   flex-direction: row;
 }
+
+.product-element {
+  width: 20%;
+}
+
+.paginationScroll {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}

@@ -216,7 +216,7 @@ const Chairs = []
 for (let i of CSS_COLOR_NAMES) {
   let newObj = {}
   newObj.name = i
-  newObj.price = Math.floor(Math.random() * 1000)
+  newObj.price = Math.floor(Math.random() * 100000)
   Chairs.push(newObj)
 }
 
