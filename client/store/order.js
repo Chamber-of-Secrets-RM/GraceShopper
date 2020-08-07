@@ -52,10 +52,10 @@ export function fetchOrder(userId) {
     }
   }
 }
-export function deleteItem(orderId, productId) {
+export function deleteItem(userId, productId) {
   return async function(dispatch) {
     try {
-      await axios.delete(`/api/order/${orderId}/chair/${productId}`)
+      await axios.delete(`/api/order/user/${userId}/chair/${productId}`)
       dispatch(removeItem(productId))
     } catch (err) {
       console.error(err)
@@ -119,7 +119,8 @@ export default function orderReducer(state = initialState, action) {
     }
 
     case REMOVE_ITEM:
-      return state.order.filter(product => product.id !== action.productId)
+      return state.filter(product => product.id !== action.productId)
+
     case UPDATE_QUANTITY:
       return state.order.map(product => {
         if (product.id === action.productId) {

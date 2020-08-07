@@ -21,7 +21,12 @@ class ShoppingCart extends Component {
       return (
         <div className="checkout-container">
           {this.props.cartInfo.map(product => (
-            <CheckoutElement key={product.id} product={product} />
+            <CheckoutElement
+              key={product.id}
+              product={product}
+              deleteItem={this.props.deleteItem}
+              user={this.props.user}
+            />
           ))}
           {/* <div>Total: ${placeholder}</div> */}
           <button>Checkout</button>
