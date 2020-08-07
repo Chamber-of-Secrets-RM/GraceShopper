@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {postToOrder, putToOrder} from '../store/order'
+import {fetchSingleProduct} from '../store/single-product'
 /**
  * COMPONENT
  */
@@ -13,6 +14,10 @@ class SingleItem extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
+  }
+  componentDidMount() {
+    const chairId = this.props.match.params.chairId
+    this.props.fetchSingleProduct(chairId)
   }
   handleChange(event) {
     this.setState({
@@ -94,7 +99,8 @@ const mapDispatch = dispatch => {
     postToOrder: (orderId, product, quantity) =>
       dispatch(postToOrder(orderId, product, quantity)),
     putToOrder: (orderId, product, quantity) =>
-      dispatch(putToOrder(orderId, product, quantity))
+      dispatch(putToOrder(orderId, product, quantity)),
+    fetchSingleProduct: chairId => dispatch(fetchSingleProduct(chairId))
   }
 }
 

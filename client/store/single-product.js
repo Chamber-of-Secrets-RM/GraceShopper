@@ -16,11 +16,11 @@ export const setProducts = singleProduct => ({
  * Thunk Creators
  */
 
-export function fetchSingleProduct(productId) {
+export function fetchSingleProduct(chairId) {
   return async function(dispatch) {
     try {
-      // const {data: singleProduct} = await axios.get(`/api/chair/${productId}`)
-      // dispatch(setProducts(singleProduct))
+      const {data: singleProduct} = await axios.get(`/api/chair/${chairId}`)
+      dispatch(setProducts(singleProduct))
     } catch (err) {
       console.error(err)
     }
@@ -31,11 +31,7 @@ export function fetchSingleProduct(productId) {
  * Reducer
  */
 
-const initialState = {
-  id: 1,
-  name: 'Red Chair',
-  price: 99
-}
+const initialState = {}
 
 export default function singleProductReducer(state = initialState, action) {
   switch (action.type) {
