@@ -33,4 +33,8 @@ const Chair = db.define('chair', {
   }
 })
 
+Chair.beforeValidate(chair => {
+  chair.price = parseInt(chair.dataValues.price * 100)
+})
+
 module.exports = Chair

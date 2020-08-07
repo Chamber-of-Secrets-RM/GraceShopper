@@ -44,6 +44,11 @@ form div {
   flex-direction: row;
 }
 
+.checkout-element .media {
+  width: 300px;
+  height: auto;
+}
+
 .product-element {
   width: 20%;
 }

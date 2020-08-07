@@ -8,7 +8,17 @@ const OrdersChairs = db.define('ordersChairs', {
   },
   itemTotal: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    get() {
+      const rawValue = this.dataValues.price
+      return rawValue / 100
+    }
   }
 })
+
+OrdersChairs.beforeValidate(orderThrough => {
+  console.log('current chair to order:', orderThrough.dataValues)
+  orderThrough.itemTotal = parseInt(orderThrough.dataValues.itemTotal * 100)
+})
+
 module.exports = OrdersChairs

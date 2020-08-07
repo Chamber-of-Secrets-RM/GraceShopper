@@ -10,7 +10,7 @@ class SingleItem extends Component {
   constructor() {
     super()
     this.state = {
-      quantity: 0
+      quantity: 1
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -95,7 +95,7 @@ class SingleItem extends Component {
             <input
               name="quantity"
               type="number"
-              min="0"
+              min="1"
               value={this.state.quantity}
               onChange={this.handleChange}
             />
