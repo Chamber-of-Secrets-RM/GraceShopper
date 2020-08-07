@@ -6,9 +6,21 @@ import {Link} from 'react-router-dom'
 
 export default function CheckoutElement(props) {
   const {product} = props
-  function handleSubmit(orderId, chairId) {
+  function handleSubmit(userId, chairId) {
+    // needs to be the tested: correct parameter?
     event.preventDefault()
-    props.deleteItem(orderId, chairId)
+
+    if (!props.user) {
+      // guest user block
+      let currentGuestOrder = localStorage.getItem('guestOrder')
+
+      currentGuestOrder.filter(chair => {
+        return this.props.key != chair.chairId
+      })
+    } else {
+      //logged in user block
+      props.deleteItem(userId, chairId)
+    }
   }
   // console.log('PROPS IN CHECKOUT ELEMENT', product.ordersChairs.quantity)
   if (!product.ordersChairs) {

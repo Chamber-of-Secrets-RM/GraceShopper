@@ -17,6 +17,29 @@ class ShoppingCart extends Component {
     //These are not real products
     console.log('this.props:', this.props)
 
+    // if this object is empty we know we are a guest
+    if (Object.keys(this.props.cart).length == 0) {
+      let guestOrder = localStorage.getItem('guestOrder')
+
+      if (!guestOrder) {
+        return <div>go buy some items</div>
+      } else {
+        // user previously had items in local storage
+        return (
+          <div className="checkout-container">
+            {guestOrder.map(product => (
+              <CheckoutElement
+                key={product.chairId}
+                product={product}
+                deleteItem={this.props.deleteItem}
+              />
+            ))}
+            {/* <div>Total: ${placeholder}</div> */}
+            <button>Checkout</button>
+          </div>
+        )
+      }
+    }
     if (this.props.cartInfo) {
       return (
         <div className="checkout-container">
@@ -41,6 +64,7 @@ class ShoppingCart extends Component {
 const mapState = state => {
   return {
     user: state.user.user,
+    cart: state.user.cart, // if empty we know we are a guest
     cartInfo: state.order
   }
 }
