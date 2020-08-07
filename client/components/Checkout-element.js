@@ -12,10 +12,11 @@ export default function CheckoutElement(props) {
 
     if (!props.user) {
       // guest user block
-      let currentGuestOrder = localStorage.getItem('guestOrder')
+      let currentGuestOrder = JSON.parse(localStorage.getItem('guestOrder'))
+      console.log('currentGuestOrder', currentGuestOrder)
 
       currentGuestOrder.filter(chair => {
-        return this.props.key != chair.chairId
+        return this.props.key !== chair.chairId
       })
     } else {
       //logged in user block
