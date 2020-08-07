@@ -37,6 +37,7 @@ class Routes extends Component {
         <Route path="/shop" component={AllProducts} />
         <Route path="/cart" component={ShoppingCart} />
         <Route path="/products/:chairId" component={SingleItem} />
+        {/* <Route path="/checkout/:cartId" component={newCheckoutElm} /> */}
       </Switch>
     )
   }
