@@ -4,13 +4,17 @@ import {Link} from 'react-router-dom'
  * COMPONENT
  */
 
-function handleSubmit(orderId, chairId) {
-  event.preventDefault()
-  this.props.deleteItem(orderId, chairId)
-}
 export default function CheckoutElement(props) {
   const {product} = props
-  console.log('PROPS IN CHECKOUT ELEMENT', props)
+  function handleSubmit(orderId, chairId) {
+    event.preventDefault()
+    props.deleteItem(orderId, chairId)
+  }
+  // console.log('PROPS IN CHECKOUT ELEMENT', product.ordersChairs.quantity)
+  if (!product.ordersChairs) {
+    console.log('what is product!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', product)
+    return <div>hello</div>
+  }
   return (
     <div className="checkout-element">
       <div>
@@ -22,15 +26,11 @@ export default function CheckoutElement(props) {
         <Link to={`/products/${product.id}`}>
           <div>{product.name}</div>
         </Link>
-        <div>Qty:{product.quantity}</div>
-        <button
-          onClick={() =>
-            handleSubmit(this.props.order.id, this.props.singleProduct.id)
-          }
-        >
+        <div>Qty:{product.ordersChairs.quantity}</div>
+        <button onClick={() => handleSubmit(props.user.id, product.id)}>
           Remove from cart
         </button>
-        <div>Price:{product.price * product.quantity}</div>
+        <div>Price:{product.price * product.ordersChairs.quantity}</div>
       </div>
     </div>
   )

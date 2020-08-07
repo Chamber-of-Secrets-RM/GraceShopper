@@ -38,12 +38,9 @@ router.get(
     }
   }
 )
-
 router.get(
   // order history route
-
   '/user/:userId/History/',
-
   // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {

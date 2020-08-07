@@ -40,7 +40,7 @@ export const getEmptyCartAndUser = data => async dispatch => {
   try {
     console.log('What is data $#%#$%#$%#$^#$^#$&#$&', data)
     let cart = await axios.get(`/api/order/user/${data.id}`)
-    console.log('what is cart')
+    console.log('what is cart', cart)
     dispatch(getUserAndCart(data, cart))
   } catch (err) {
     console.log('error in getting empty cart')
