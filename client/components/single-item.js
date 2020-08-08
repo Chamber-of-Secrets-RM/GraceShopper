@@ -24,13 +24,14 @@ class SingleItem extends Component {
       [event.target.name]: event.target.value
     })
   }
+
   handleSubmit(event) {
     event.preventDefault()
     // if the object is empty we know that we are a guest user
     console.log('this.props.user.user', this.props.user.user)
     if (Object.keys(this.props.user.user.user).length === 0) {
       let newItem = {
-        quantity: this.state.quantity,
+        quantity: +this.state.quantity,
         itemTotal: this.props.singleProduct.price * this.state.quantity,
         chairId: this.props.singleProduct.id
       }
@@ -46,7 +47,23 @@ class SingleItem extends Component {
         localStorage.setItem('guestOrder', stringifiedOrder)
       } else if (currentGuestOrder) {
         let destringifiedOrder = JSON.parse(currentGuestOrder)
-        destringifiedOrder.push(newItem)
+
+        // we need to check if newItem exists in destringifiedOrder
+        // if it does: change the quantity
+        // if not: push the item
+
+        let foundDuplicate = false
+        for (let orderItem of destringifiedOrder) {
+          if (orderItem.chairId === newItem.chairId) {
+            orderItem.quantity += +newItem.quantity
+            orderItem.itemTotal +=
+              newItem.quantity * this.props.singleProduct.price
+            foundDuplicate = true
+          }
+        }
+        if (!foundDuplicate) {
+          destringifiedOrder.push(newItem)
+        }
         let stringifiedOrder = JSON.stringify(destringifiedOrder)
         localStorage.setItem('guestOrder', stringifiedOrder)
       }
