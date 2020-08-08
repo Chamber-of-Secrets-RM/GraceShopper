@@ -9,10 +9,44 @@ import {deleteItem} from '../store/order'
  */
 
 class ShoppingCart extends Component {
+  constructor() {
+    super()
+    this.state = {
+      quantity: 1
+    }
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
   async componentDidMount() {
     console.log('inside shoppingCar CDM', this.props)
+
+    // don't think we need this
     this.props.fetchOrder(this.props.user.id)
   }
+  handleSubmit(user, userId, comparableChairId) {
+    // needs to be the tested: correct parameter?
+    event.preventDefault()
+
+    if (!user) {
+      // guest user block
+      let currentGuestOrder = JSON.parse(localStorage.getItem('guestOrder'))
+      console.log('currentGuestOrder', currentGuestOrder)
+
+      currentGuestOrder = currentGuestOrder.filter(chair => {
+        console.log('COMPARING BETWEEN', comparableChairId, chair.chairId)
+        return comparableChairId !== chair.chairId
+      })
+      let stringifiedOrder = JSON.stringify(currentGuestOrder)
+      localStorage.setItem('guestOrder', stringifiedOrder)
+      console.log('ABOUT TO SET STATE HERE', this.state)
+      this.setState(state => {
+        return {quantity: state.quantity + 1}
+      })
+    } else {
+      //logged in user block
+      console.log('WE DONT WANT TO MAKE IT IN HERE!!!!!!!!!!!!!!')
+      this.props.deleteItem(userId, chairId)
+    }
+  } // end of handleSubmit
   render() {
     //These are not real products
     console.log('this.props:', this.props)
@@ -32,6 +66,7 @@ class ShoppingCart extends Component {
                 key={product.chairId}
                 product={product}
                 deleteItem={this.props.deleteItem}
+                handleSubmit={this.handleSubmit}
               />
             ))}
             {/* <div>Total: ${placeholder}</div> */}
@@ -49,6 +84,7 @@ class ShoppingCart extends Component {
               product={product}
               deleteItem={this.props.deleteItem}
               user={this.props.user}
+              handleSubmit={this.handleSubmit}
             />
           ))}
           {/* <div>Total: ${placeholder}</div> */}
