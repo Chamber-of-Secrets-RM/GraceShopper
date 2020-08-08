@@ -24,30 +24,23 @@ export class UserHome extends Component {
     console.log('FETCHED ORDER IN CDM OF HOMEPAGE', this.props)
     this.props.fetchOrder(this.props.user.id)
 
-    // let currentGuestOrder = localStorage.getItem('guestOrder')
-    // if(!this.props.order){
-    //  //debugging
-    // }
-    // else if(currentGuestOrder){
-    //   console.log("COMPONENT DID UPDATE",this.props)
-    //   for(let i of currentGuestOrder){
-    //     if (binarySearch(this.props.orders, i.chairId) != -1){
-    //       // found in our previous order, do a put
-    //       this.props.putToOrder(
-    //         i,
-    //         this.props.user.user.id,
-    //         i.quantity)
-    //     }
-    //     else{
-    //       this.props.postToOrder(
-    //         i,
-    //         this.props.user.user.id,
-    //         i.quantity
-    //       )
-    //     }
-
-    //   }
-    // }
+    let currentGuestOrder = localStorage.getItem('guestOrder')
+    console.log('WHAT IS MY CURRENT GUEST ORDER', currentGuestOrder)
+    if (!this.props.order) {
+      //debugging
+    } else if (currentGuestOrder) {
+      console.log('COMPONENT DID UPDATE', this.props)
+      for (let i of currentGuestOrder) {
+        if (binarySearch(this.props.orders, i.chairId) != -1) {
+          // found in our previous order, do a put
+          this.props.putToOrder(i, this.props.user.user.id, i.quantity)
+        } else {
+          this.props.postToOrder(i, this.props.user.user.id, i.quantity)
+        }
+      }
+    }
+    localStorage.clear()
+    console.log('local storage cleared')
   }
 
   render() {

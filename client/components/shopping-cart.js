@@ -18,7 +18,7 @@ class ShoppingCart extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   async componentDidMount() {
-    console.log('inside shoppingCar CDM', this.props)
+    // console.log('inside shoppingCar CDM', this.props)
 
     // don't think we need this
     this.props.fetchOrder(this.props.user.id)
@@ -28,25 +28,26 @@ class ShoppingCart extends Component {
     // needs to be the tested: correct parameter?
     event.preventDefault()
 
+    console.log('INSIDE OF REMOVE FROM CART BUTTON, WHAT IOS USER', user)
     if (!user) {
       // guest user block
       let currentGuestOrder = JSON.parse(localStorage.getItem('guestOrder'))
-      console.log('currentGuestOrder', currentGuestOrder)
+      // console.log('currentGuestOrder', currentGuestOrder)
 
       currentGuestOrder = currentGuestOrder.filter(chair => {
-        console.log('COMPARING BETWEEN', comparableChairId, chair.chairId)
+        // console.log('COMPARING BETWEEN', comparableChairId, chair.chairId)
         return comparableChairId !== chair.chairId
       })
       let stringifiedOrder = JSON.stringify(currentGuestOrder)
       localStorage.setItem('guestOrder', stringifiedOrder)
-      console.log('ABOUT TO SET STATE HERE', this.state)
+      // console.log('ABOUT TO SET STATE HERE', this.state)
       this.setState(state => {
         return {quantity: state.quantity + 1}
       })
     } else {
       //logged in user block
-      console.log('WE DONT WANT TO MAKE IT IN HERE!!!!!!!!!!!!!!')
-      this.props.deleteItem(userId, chairId)
+      // console.log('WE DONT WANT TO MAKE IT IN HERE!!!!!!!!!!!!!!')
+      this.props.deleteItem(userId, comparableChairId)
     }
   } // end of handleSubmit
   render() {
@@ -75,7 +76,7 @@ class ShoppingCart extends Component {
     console.log('this.props:', this.props)
 
     // if this object is empty we know we are a guest
-    if (Object.keys(this.props.cart).length === 0) {
+    if (Object.keys(this.props.cartInfo).length === 0) {
       let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
       console.log(guestOrder)
       if (!guestOrder) {
@@ -113,6 +114,7 @@ class ShoppingCart extends Component {
       }
     }
     if (this.props.cartInfo) {
+      console.log('AM I MAKING IT HERE?!?!?!?!??!?!?!?')
       return (
         <div className="checkout-container">
           {this.props.cartInfo.map(product => (
