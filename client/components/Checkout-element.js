@@ -10,7 +10,7 @@ export default class CheckoutElement extends Component {
   }
 
   render() {
-    const {product} = this.props
+    const {product, imageUrl, name} = this.props
     if (!this.props.user) {
       console.log(
         'what is this.props!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
@@ -21,12 +21,12 @@ export default class CheckoutElement extends Component {
         <div className="checkout-element">
           <div>
             <Link to={`/products/${product.chairId}`}>
-              <img className="media" src={product.imageUrl} />
+              <img className="media" src={imageUrl} />
             </Link>
           </div>
           <div>
             <Link to={`/products/${product.id}`}>
-              <div>{product.name}</div>
+              <div>{name}</div>
             </Link>
             <div>Qty:{product.quantity}</div>
             <button

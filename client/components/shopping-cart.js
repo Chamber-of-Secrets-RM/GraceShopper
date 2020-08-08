@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
 import {fetchOrder} from '../store/order'
 import {deleteItem} from '../store/order'
+import {fetchProducts} from '../store/products'
 
 /**
  * COMPONENT
@@ -21,6 +22,7 @@ class ShoppingCart extends Component {
 
     // don't think we need this
     this.props.fetchOrder(this.props.user.id)
+    this.props.fetchProducts()
   }
   handleSubmit(user, userId, comparableChairId) {
     // needs to be the tested: correct parameter?
@@ -48,6 +50,27 @@ class ShoppingCart extends Component {
     }
   } // end of handleSubmit
   render() {
+    const binarySearch = (productArr, chairId) => {
+      let l = 0
+      let r = productArr.length - 1
+      let idx = -1
+      while (l < r) {
+        let m = Math.floor((l + r) / 2)
+
+        if (productArr[m].id == chairId) {
+          return m
+        } else if (productArr[m].id < chairId) {
+          l = m + 1
+        } else {
+          r = m
+        }
+      }
+      return idx
+    }
+
+    if (this.props.products.length === 0) {
+      return <div />
+    }
     //These are not real products
     console.log('this.props:', this.props)
 
@@ -61,15 +84,29 @@ class ShoppingCart extends Component {
         // user previously had items in local storage
         return (
           <div className="checkout-container">
-            {guestOrder.map(product => (
-              <CheckoutElement
-                key={product.chairId}
-                product={product}
-                deleteItem={this.props.deleteItem}
-                handleSubmit={this.handleSubmit}
-              />
-            ))}
-            {/* <div>Total: ${placeholder}</div> */}
+            {guestOrder.map(product => {
+              console.log('WHAT IS OUR INDEX', product.chairId)
+              // instead of indexing by Id, we need to find the right id in table
+              let index = binarySearch(this.props.products, product.chairId)
+              console.log('INDEX FROM OUR BINARY SEARCH IS', index)
+              let imageUrl = this.props.products[index]
+
+              // instead search through products to find chairId Index
+              console.log('WHAT IS imageUIRL INSIDE OF SHOPPING CART', imageUrl)
+              let name = this.props.products[index]
+
+              return (
+                <CheckoutElement
+                  key={product.chairId}
+                  product={product}
+                  deleteItem={this.props.deleteItem}
+                  handleSubmit={this.handleSubmit}
+                  imageUrl={imageUrl.imageUrl}
+                  name={name.name}
+                />
+              )
+            })}
+
             <button>Checkout</button>
           </div>
         )
@@ -101,13 +138,16 @@ const mapState = state => {
   return {
     user: state.user.user,
     cart: state.user.cart, // if empty we know we are a guest
-    cartInfo: state.order
+    cartInfo: state.order,
+    products: state.products
   }
 }
 const mapDispatch = dispatch => {
   return {
     fetchOrder: userId => dispatch(fetchOrder(userId)),
-    deleteItem: (orderId, productId) => dispatch(deleteItem(orderId, productId))
+    deleteItem: (orderId, productId) =>
+      dispatch(deleteItem(orderId, productId)),
+    fetchProducts: () => dispatch(fetchProducts())
   }
 }
 
