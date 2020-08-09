@@ -43,13 +43,13 @@ class SingleItem extends Component {
       }
       if (!duplicateCheck) {
         this.props.postToOrder(
-          this.props.singleProduct,
+          this.props.singleProduct.id,
           this.props.user.user.id,
           this.state.quantity
         )
       } else {
         this.props.putToOrder(
-          this.props.singleProduct,
+          this.props.singleProduct.id,
           this.props.user.user.id,
           this.state.quantity
         )
