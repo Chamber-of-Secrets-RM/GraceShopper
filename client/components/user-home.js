@@ -14,44 +14,21 @@ export class UserHome extends Component {
     this.state = {
       quantity: 1
     }
-    this.handleClick = this.handleClick.bind(this)
   }
-  handleClick() {
-    console.log('state is', this.state.quantity)
-    this.setState({quantity: this.state.quantity + 1})
-  }
-  componentDidMount() {
-    console.log('inside userHome CDM', this.props)
 
-    // this happens everytime a guest logs in, but it is safe to assume that
-    // if a guest logins in and there is something in local storage, we should go ahead
-    // and add what is in local storage to the users previous order
-    // we can loop through our local storage and do adds
-    // we wil have to do another duplicate check as well
-  }
-  // shouldComponentUpdate(nextProps, nextState){
-  //   console.log("inside should update old props",this.props)
-  //   console.log("inside should update new", nextProps)
-  //   return this.props!= nextProps
-  // }
-  async componentDidUpdate(prevProps) {
-    console.log('FETCHED ORDER IN CDM OF HOMEPAGE', this.props)
+  async componentDidUpdate() {
     if (this.state.quantity === 1) {
       this.setState({quantity: this.state.quantity + 1})
       await this.props.fetchOrder(this.props.user.id)
     }
 
-    if (prevProps.order !== this.props.order) {
-      console.log('I AM SEEING ORDER CHANGE IN PROPS YAY')
-    }
     let currentGuestOrder = localStorage.getItem('guestOrder')
     let destringifiedOrder = JSON.parse(currentGuestOrder)
-    console.log('WHAT IS MY CURRENT GUEST ORDER', destringifiedOrder)
+
     if (!this.props.order.length) {
       //debugging
     } else if (destringifiedOrder) {
       for (let i of destringifiedOrder) {
-        console.log('POSTING AND PUTTING PUTTING AND POSTING', i)
         if (binarySearch(this.props.order, i.chairId) != -1) {
           // found in our previous order, do a put
           this.props.putToOrder(i.chairId, this.props.user.id, i.quantity)
@@ -65,7 +42,6 @@ export class UserHome extends Component {
   }
 
   render() {
-    console.log('AFTER COMPONENT DID MOUNT', this.props)
     return (
       <div>
         <h3>Chamber of Furniture</h3>
