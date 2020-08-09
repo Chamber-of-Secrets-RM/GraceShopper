@@ -47,7 +47,7 @@ export class UserHome extends Component {
     let currentGuestOrder = localStorage.getItem('guestOrder')
     let destringifiedOrder = JSON.parse(currentGuestOrder)
     console.log('WHAT IS MY CURRENT GUEST ORDER', destringifiedOrder)
-    if (this.props.user.email) {
+    if (!this.props.order.length) {
       //debugging
     } else if (destringifiedOrder) {
       for (let i of destringifiedOrder) {
