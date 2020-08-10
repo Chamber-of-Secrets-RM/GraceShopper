@@ -1,20 +1,8 @@
 const router = require('express').Router()
 const {Chair} = require('../db/models')
-module.exports = router
+const isAdminMiddleware = require('./adminMiddleware')
 
-// move to a sepreate file and import as nessecary
-const isAdminMiddleware = (req, res, next) => {
-  const currentUser = req.session.user
-  if (currentUser && currentUser.isAdmin) {
-    next()
-  } else {
-    const error = new Error(
-      'You are not allowed to do this. The authorities have been notified.'
-    )
-    error.status = 401
-    next(error)
-  }
-}
+module.exports = router
 
 //  api/chair/ => Gets ALL chairs
 router.get('/', async (req, res, next) => {

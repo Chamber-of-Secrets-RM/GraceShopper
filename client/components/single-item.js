@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+/* eslint-disable max-statements */
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {postToOrder, putToOrder} from '../store/order'
