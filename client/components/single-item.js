@@ -4,6 +4,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {postToOrder, putToOrder} from '../store/order'
 import {fetchSingleProduct} from '../store/single-product'
+import Axios from 'axios'
 /**
  * COMPONENT
  */
@@ -16,6 +17,7 @@ class SingleItem extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.deleteItem = this.deleteItem.bind(this)
   }
   componentDidMount() {
     const chairId = this.props.match.params.chairId
@@ -96,7 +98,9 @@ class SingleItem extends Component {
       }
     }
   }
-  handleDelete(event) {}
+  async deleteItem(itemId) {
+    await Axios.delete(`/api/chair/${itemId}`)
+  }
   render() {
     const {singleProduct} = this.props
 
@@ -155,7 +159,10 @@ class SingleItem extends Component {
             />
             <button type="submit">Add to cart</button>
           </form>
-          <button onClick={this.deleteItem} type="submit">
+          <button
+            type="submit"
+            onClick={() => this.deleteItem(singleProduct.id)}
+          >
             Remove item from Database
           </button>
         </div>
