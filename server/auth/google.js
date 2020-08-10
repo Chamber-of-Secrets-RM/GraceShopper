@@ -2,7 +2,6 @@ const passport = require('passport')
 const router = require('express').Router()
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 const {User} = require('../db/models')
-module.exports = router
 
 /**
  * For OAuth keys and other secrets, your Node process will search
@@ -36,7 +35,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       const firstName = profile.name.givenName
       const lastName = profile.name.familyName
       const fullName = profile.displayName
-
+      console.log('entering Google strategy')
       User.findOrCreate({
         where: {googleId},
         // defaults: {email, imgUrl, firstName, lastName, fullName}
@@ -53,12 +52,14 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     '/',
     passport.authenticate('google', {scope: ['email', 'profile']})
   )
-
+  //OMG... we were checking '/callback'
   router.get(
-    '/callback',
+    '/verify',
     passport.authenticate('google', {
       successRedirect: '/home',
       failureRedirect: '/login'
     })
   )
 }
+
+module.exports = router
