@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {fetchOrder} from '../store/order'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder} from '../store/order'
+import LineGraph from './LineGraph'
 
 /**
  * COMPONENT
@@ -48,6 +49,7 @@ export class UserHome extends Component {
         <h3>
           <small>About Us:</small>
         </h3>
+        <LineGraph />
         <p>Yo yo yo, ma dawg.</p>
         <p>quantity is {this.state.quantity}</p>
         <button onClick={() => this.handleClick()}>
