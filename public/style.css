@@ -58,3 +58,7 @@ form div {
   flex-direction: row;
   list-style: none;
 }
+.nav-link {
+  margin: 1.5rem;
+  color: white;
+}
