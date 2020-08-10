@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const {Order, OrdersChairs, Chair} = require('../db/models')
 
+const {Op} = require('sequelize')
+
 module.exports = router
 
 // const isAdminOrProperUserMiddleware = (req, res, next) => {
@@ -55,6 +57,42 @@ router.get(
       })
       // check if admin or correct user //
       res.json(orders)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+// this route is used to get all fulfilled orders for ALL users (analytics page for admin)
+router.get(
+  // order history route
+  '/fulfilledOrders',
+  // isAdminOrProperUserMiddleware,
+  async (req, res, next) => {
+    try {
+      const ordersInstance = await Order.findAll({
+        where: {
+          isFulfilled: 1
+        }
+      })
+      console.log('what is order instance', ordersInstance)
+
+      let orderIdsArray = ordersInstance.map(val => {
+        return val.id
+      })
+
+      console.log('what are ordersIDs', orderIdsArray)
+
+      const data = await OrdersChairs.findAll({
+        where: {
+          orderId: {
+            [Op.in]: orderIdsArray
+          }
+        }
+      })
+
+      console.log('what is final data', data)
+      res.json(data)
+      // check if admin or correct user //
     } catch (err) {
       next(err)
     }
@@ -144,6 +182,29 @@ router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
         where: {
           orderId: userOrderInstance.id,
           chairId: req.params.chairId
+        },
+        returning: true
+      }
+    )
+    console.log('WHAT IS NUMUPDATED', numUpdated)
+    console.log('WHAT IS DATA ON THE BACKEND fOR PUT', affectedRows)
+    res.json(affectedRows[0])
+  } catch (error) {
+    next(error)
+  }
+})
+
+// set an order to fulfiled for testing( will need user implementation with security check after)
+router.put('/setFulfilled/:orderId', async (req, res, next) => {
+  try {
+    const [numUpdated, affectedRows] = await Order.update(
+      {
+        isFulfilled: 1
+        // itemTotal: currentChair.price * req.body.quantity
+      },
+      {
+        where: {
+          id: req.params.orderId
         },
         returning: true
       }
