@@ -84,9 +84,14 @@ router.get(
 //to avoid bypassing prices defined on front end.
 router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
+    if (!req.user) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    }
+    console.log('THISIS THE REQ.USER: ', req.user)
     const [userOrderInstance] = await Order.findAll({
       where: {
-        userId: req.params.userId,
+        userId: req.user.dataValues.id,
         isFulfilled: 0 // 0 is unfulfilled, 1 is fulfilled
       }
     })
