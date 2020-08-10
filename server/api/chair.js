@@ -4,8 +4,6 @@ const isAdminMiddleware = require('./adminMiddleware')
 
 module.exports = router
 
-// move to a sepreate file and import as nessecary
-
 //  api/chair/ => Gets ALL chairs
 router.get('/', async (req, res, next) => {
   try {
