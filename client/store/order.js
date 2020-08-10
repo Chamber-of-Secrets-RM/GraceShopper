@@ -74,11 +74,11 @@ export function deleteItem(userId, productId) {
 //     }
 //   }
 // }
-export function postToOrder(product, userId, quantity) {
+export function postToOrder(productId, userId, quantity) {
   return async function(dispatch) {
     try {
       const {data} = await axios.post(
-        `/api/order/user/${userId}/chair/${product.id}`,
+        `/api/order/user/${userId}/chair/${productId}`,
         {
           quantity: quantity
         }
@@ -89,11 +89,11 @@ export function postToOrder(product, userId, quantity) {
     }
   }
 }
-export function putToOrder(product, userId, quantity) {
+export function putToOrder(productId, userId, quantity) {
   return async function(dispatch) {
     try {
       const {data} = await axios.put(
-        `/api/order/user/${userId}/chair/${product.id}`,
+        `/api/order/user/${userId}/chair/${productId}`,
         {
           quantity: quantity
         }
