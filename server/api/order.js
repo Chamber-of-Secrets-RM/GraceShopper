@@ -118,6 +118,10 @@ router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
 //Need to check order on front end to make sure chair is in the order/cart
 router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
+    if (!req.user) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    }
     const [userOrderInstance] = await Order.findAll({
       where: {
         userId: req.params.userId,
@@ -154,6 +158,10 @@ router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
 
 router.delete('/user/:userId/chair/:chairId/', async (req, res, next) => {
   try {
+    if (!req.user) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    }
     const [userOrderInstance] = await Order.findAll({
       where: {
         userId: req.params.userId,
