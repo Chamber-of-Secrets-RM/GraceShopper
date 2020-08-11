@@ -21,7 +21,10 @@ export const setPurchasesForAdmin = purchases => ({
 export function fetchUserSpecificPurchases(userId) {
   return async function(dispatch) {
     try {
-      const {data} = await axios.get(`/api/order/user/${userId}/History`)
+      let data = await axios.get(`/api/order/user/${userId}/History`)
+      console.log('FETCHING ALL PURCHASES USER SPECIFIC INSIDE THUNK1111', data)
+
+      data = data.data
       console.log('FETCHING ALL PURCHASES USER SPECIFIC INSIDE THUNK', data)
       dispatch(setPurchasesForUser(data))
     } catch (err) {

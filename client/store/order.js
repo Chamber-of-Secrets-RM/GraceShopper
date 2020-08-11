@@ -117,7 +117,6 @@ const initialState = []
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_ORDER: {
-      console.log('inside of set order action')
       return action.order
     }
 

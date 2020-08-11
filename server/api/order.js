@@ -60,7 +60,8 @@ router.get(
           orderId: {
             [Op.in]: orderIdsArray
           }
-        }
+        },
+        raw: true
       })
       // check if admin or correct user //
       console.log('WHAT IS MY DATA I AM GETTING FROM ORDERSCHAIRS', data)
