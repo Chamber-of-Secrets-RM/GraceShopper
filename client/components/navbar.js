@@ -18,6 +18,7 @@ class Navbar extends Component {
       display: flex;
       height: 3rem;
       align-items: center;
+      margin-bottom: 3rem;
     `
     const LoginDiv = styled.div`
       width: 100%;
