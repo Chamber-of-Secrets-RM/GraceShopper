@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {fetchOrder, fetchAllPurchases} from '../store/order'
+import {fetchOrder} from '../store/order'
+import {fetchAllPurchases} from '../store/orderHistory'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder} from '../store/order'
 

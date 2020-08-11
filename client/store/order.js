@@ -120,10 +120,6 @@ export default function orderReducer(state = initialState, action) {
       console.log('inside of set order action')
       return action.order
     }
-    case SET_PURCHASES: {
-      console.log('inside of set purchases action')
-      return action.purchases
-    }
 
     case REMOVE_ITEM:
       return state.filter(product => product.id !== action.productId)
