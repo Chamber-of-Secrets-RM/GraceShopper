@@ -5,6 +5,8 @@ import {fetchOrder} from '../store/order'
 import {deleteItem, clearOrder} from '../store/order'
 import {fetchProducts} from '../store/products'
 import {binarySearch} from './helperFunctions'
+import {Link} from 'react-router-dom'
+
 /**
  * COMPONENT
  */
@@ -87,7 +89,10 @@ class ShoppingCart extends Component {
                 />
               )
             })}
-            <button>Checkout</button>
+
+            <Link to="/checkout">
+              <button type="button">Checkout</button>
+            </Link>
           </div>
         )
       }
@@ -106,7 +111,10 @@ class ShoppingCart extends Component {
             />
           ))}
           {/* <div>Total: ${placeholder}</div> */}
-          <button>Checkout</button>
+
+          <Link to="/checkout">
+            <button type="button">Checkout</button>
+          </Link>
         </div>
       )
     } else {
