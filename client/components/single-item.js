@@ -117,7 +117,7 @@ class SingleItem extends Component {
     const chair = {
       id: this.props.singleProduct.id
     }
-    deleteItem(chair)
+    this.props.deleteItem(chair)
   }
   render() {
     const {singleProduct} = this.props
@@ -220,7 +220,7 @@ const mapDispatch = dispatch => {
       dispatch(putToOrder(orderId, product, quantity)),
     fetchSingleProduct: chairId => dispatch(fetchSingleProduct(chairId)),
     changeProduct: chair => dispatch(changeProduct(chair)),
-    deleteItem: chair => dispatch(deleteProduct(chair))
+    deleteItem: chair => dispatch(deleteItem(chair))
   }
 }
 

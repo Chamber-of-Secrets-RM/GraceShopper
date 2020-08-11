@@ -20,19 +20,19 @@ export const deleteProduct = chairId => ({
 /**
  * Thunk Creators
  */
-export function deleteItem(chairId) {
+export function deleteItem(chair) {
   return async function(dispatch) {
     try {
-      await axios.delete(`/api/chair/${chairId}`, chairId)
-      dispatch(deleteProduct(chairId))
+      await axios.delete(`/api/chair/${chair.id}`, chair.id)
+      dispatch(deleteProduct(chair.id))
     } catch (err) {
       console.error(err)
+      console.log('😆🎷', chair.id)
     }
   }
 }
 
 export function fetchProducts() {
-  console.log('im in fetchProducts')
   return async function(dispatch) {
     try {
       const {data: products} = await axios.get('/api/chair')

@@ -18,7 +18,6 @@ const Chair = db.define('chair', {
     allowNull: false,
     get() {
       const rawValue = this.dataValues.price
-      console.log('this is the GET VALUE', this.dataValues)
       return rawValue / 100
     }
   },
