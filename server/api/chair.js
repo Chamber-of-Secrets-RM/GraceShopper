@@ -4,15 +4,18 @@ module.exports = router
 
 // move to a sepreate file and import as nessecary
 const isAdminMiddleware = (req, res, next) => {
-  // originaly req.session.user
-  const currentUser = req.user.user
-  console.log('CurrentUser in isAdmin', currentUser)
+  if (!req.user) {
+    const error = new Error(
+      'You are not allowed to do this. The authorities have been notified!'
+    )
+    next(error)
+  }
+  const currentUser = req.user.dataValues
   if (currentUser && currentUser.isAdmin) {
     next()
   } else {
     const error = new Error(
-      'You are not allowed to do this. The authorities have been notified.this is the current user =>',
-      console.log(currentUser)
+      'You are not allowed to do this. The authorities have been notified!'
     )
     error.status = 401
     next(error)
@@ -75,8 +78,8 @@ router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
 
 // api/chairs/:chairId => Deletes chair from Chair model in db
 router.delete('/:chairId', isAdminMiddleware, async (req, res, next) => {
-  console.log('this is the req and res in delete route for CHARI :', req)
   try {
+    console.log('this is the req and res in delete route for CHARI :', req.user)
     Chair.destroy({
       where: {
         id: req.params.chairId
