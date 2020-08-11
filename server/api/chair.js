@@ -43,6 +43,7 @@ router.post('/', isAdminMiddleware, async (req, res, next) => {
 router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
   try {
     const chairInstance = await Chair.findByPk(req.params.chairId)
+    console.log('THis is the chairInst', chairInstance)
     const data = await chairInstance.update(req.body)
     console.log('🦆This is the req:', req.body)
     res.json(data)

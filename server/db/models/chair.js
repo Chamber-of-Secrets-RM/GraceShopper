@@ -18,6 +18,7 @@ const Chair = db.define('chair', {
     allowNull: false,
     get() {
       const rawValue = this.dataValues.price
+      console.log('this is the GET VALUE', this.dataValues)
       return rawValue / 100
     }
   },
@@ -32,7 +33,8 @@ const Chair = db.define('chair', {
   }
 })
 
-Chair.beforeValidate(chair => {
+Chair.beforeUpdate(chair => {
+  console.log('😃this is the chair.price :', chair.price)
   chair.price = parseInt(chair.dataValues.price * 100)
 })
 
