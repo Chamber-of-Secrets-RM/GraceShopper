@@ -2,7 +2,10 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {fetchOrder} from '../store/order'
-import {fetchAllPurchases} from '../store/orderHistory'
+import {
+  fetchAllPurchases,
+  fetchUserSpecificPurchases
+} from '../store/orderHistory'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder} from '../store/order'
 
@@ -25,6 +28,8 @@ export class UserHome extends Component {
 
       if (this.props.isAdmin) {
         await this.props.fetchAllPurchases()
+      } else {
+        await this.props.fetchUserSpecificPurchases(this.props.user.id)
       }
     }
 
@@ -86,6 +91,9 @@ const mapDispatch = dispatch => {
   return {
     fetchOrder: userId => dispatch(fetchOrder(userId)),
     fetchAllPurchases: () => dispatch(fetchAllPurchases()),
+    fetchUserSpecificPurchases: userId =>
+      dispatch(fetchUserSpecificPurchases(userId)),
+
     postToOrder: (orderId, product, quantity) =>
       dispatch(postToOrder(orderId, product, quantity)),
     putToOrder: (orderId, product, quantity) =>
