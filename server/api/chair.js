@@ -25,6 +25,9 @@ router.get('/:chairId', async (req, res, next) => {
     const data = await Chair.findOne({
       where: {
         id: req.params.chairId
+      },
+      include: {
+        model: Tags
       }
     })
     res.json(data)
