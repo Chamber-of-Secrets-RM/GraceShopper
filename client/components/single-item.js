@@ -121,7 +121,7 @@ class SingleItem extends Component {
   }
   render() {
     const {singleProduct} = this.props
-
+    console.log('singleProduct render:', singleProduct)
     if (singleProduct && singleProduct.id && !this.props.user.user.isAdmin) {
       return (
         <div className="single-product-view">
@@ -133,6 +133,7 @@ class SingleItem extends Component {
           <h1>
             <small>Description:</small>
           </h1>
+          <div>Tags:{singleProduct.tags.map(tag => tag.name).join(', ')}</div>
           <p>{singleProduct.description}</p>
           <form onSubmit={this.handleSubmit}>
             <input

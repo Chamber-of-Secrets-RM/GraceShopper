@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Chair} = require('../db/models')
+const {Chair, Tags} = require('../db/models')
 const isAdminMiddleware = require('./adminMiddleware')
 
 module.exports = router
@@ -8,7 +8,11 @@ module.exports = router
 //  api/chair/ => Gets ALL chairs
 router.get('/', async (req, res, next) => {
   try {
-    const chairs = await Chair.findAll({})
+    const chairs = await Chair.findAll({
+      include: {
+        model: Tags
+      }
+    })
     res.json(chairs)
   } catch (err) {
     next(err)
@@ -21,6 +25,9 @@ router.get('/:chairId', async (req, res, next) => {
     const data = await Chair.findOne({
       where: {
         id: req.params.chairId
+      },
+      include: {
+        model: Tags
       }
     })
     res.json(data)
