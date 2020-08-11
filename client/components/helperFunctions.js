@@ -15,3 +15,15 @@ export const binarySearch = (productArr, chairId) => {
   }
   return idx
 }
+
+export const convertTime = sequelizeDate => {
+  let stringDate = ''
+
+  stringDate = sequelizeDate.slice(0, 10)
+
+  let suffix = ' 00:00:00'
+
+  stringDate += suffix
+
+  return stringDate
+}

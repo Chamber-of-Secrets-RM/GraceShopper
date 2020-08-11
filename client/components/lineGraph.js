@@ -5,6 +5,7 @@ import {max, extent} from 'd3-array'
 import {axisBottom, axisLeft} from 'd3-axis'
 import {line} from 'd3-shape'
 import {connect} from 'react-redux'
+import {convertTime} from './helperFunctions'
 
 class LineGraph extends Component {
   constructor(props) {
@@ -30,7 +31,8 @@ class LineGraph extends Component {
     let hashTable = {}
     for (let element of this.props.orderHistory) {
       let x = element.updatedAt
-      if (element.quantity in hashTable) {
+      x = convertTime(x)
+      if (x in hashTable) {
         hashTable[x] += parseInt(element.quantity)
       } else {
         hashTable[x] = parseInt(element.quantity)
@@ -47,6 +49,8 @@ class LineGraph extends Component {
     }
 
     console.log('WHAT IS MY TEST ARRAY', testArray)
+    // convert all dates in array to match the domain on line 61
+    // can write a quick helper function
 
     let svg = select(node)
       .append('svg')
@@ -56,11 +60,11 @@ class LineGraph extends Component {
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     let x = scaleTime()
-      .domain(
-        extent(testArray, function(d) {
-          return d.x
-        })
-      )
+      ///.domain([new Date("1972-02-24 00:00:00"), new Date("1972-03-06 00:00:00")])
+      .domain([
+        new Date('2020-08-05 00:00:00'),
+        new Date('2020-08-15 00:00:00')
+      ])
       .range([0, width])
     svg
       .append('g')

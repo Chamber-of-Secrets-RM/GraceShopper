@@ -5,7 +5,6 @@ import {fetchOrder} from '../store/order'
 import {fetchAllPurchases} from '../store/orderHistory'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder} from '../store/order'
-import LineGraph from './lineGraph'
 
 /**
  * COMPONENT
