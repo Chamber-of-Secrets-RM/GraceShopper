@@ -105,11 +105,7 @@ class SingleItem extends Component {
   render() {
     const {singleProduct} = this.props
 
-    if (
-      singleProduct &&
-      singleProduct.id &&
-      this.props.user.user.isAdmin === false
-    ) {
+    if (singleProduct && singleProduct.id && !this.props.user.user.isAdmin) {
       return (
         <div className="single-product-view">
           <h1>{singleProduct.name}</h1>
