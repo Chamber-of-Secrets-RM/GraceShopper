@@ -46,17 +46,26 @@ router.get(
   // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
-      const orders = await Order.findAll({
+      const ordersInstance = await Order.findAll({
         where: {
           userId: req.params.userId,
           isFulfilled: 1
-        },
-        include: {
-          model: Chair
         }
       })
+      let orderIdsArray = ordersInstance.map(val => {
+        return val.id
+      })
+      const data = await OrdersChairs.findAll({
+        where: {
+          orderId: {
+            [Op.in]: orderIdsArray
+          }
+        },
+        raw: true
+      })
       // check if admin or correct user //
-      res.json(orders)
+      console.log('WHAT IS MY DATA I AM GETTING FROM ORDERSCHAIRS', data)
+      res.json(data)
     } catch (err) {
       next(err)
     }
