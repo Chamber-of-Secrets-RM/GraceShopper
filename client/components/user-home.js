@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {fetchOrder} from '../store/order'
+import {fetchOrder, fetchAllPurchases} from '../store/order'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder} from '../store/order'
 
@@ -12,7 +12,8 @@ export class UserHome extends Component {
   constructor() {
     super()
     this.state = {
-      quantity: 1
+      quantity: 1,
+      isAdminChecked: false
     }
   }
 
@@ -20,6 +21,10 @@ export class UserHome extends Component {
     if (this.state.quantity === 1) {
       this.setState({quantity: this.state.quantity + 1})
       await this.props.fetchOrder(this.props.user.id)
+
+      if (this.props.isAdmin) {
+        await this.props.fetchAllPurchases()
+      }
     }
 
     let currentGuestOrder = localStorage.getItem('guestOrder')
@@ -71,12 +76,14 @@ const mapState = state => {
   return {
     email: state.user.email,
     user: state.user.user,
-    order: state.order
+    order: state.order,
+    isAdmin: state.user.isAdmin
   }
 }
 const mapDispatch = dispatch => {
   return {
     fetchOrder: userId => dispatch(fetchOrder(userId)),
+    fetchAllPurchases: () => dispatch(fetchAllPurchases()),
     postToOrder: (orderId, product, quantity) =>
       dispatch(postToOrder(orderId, product, quantity)),
     putToOrder: (orderId, product, quantity) =>

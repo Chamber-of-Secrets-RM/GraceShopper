@@ -15,6 +15,7 @@ export const setOrder = order => ({
   type: SET_ORDER,
   order
 })
+
 export const removeItem = productId => {
   return {
     type: REMOVE_ITEM,
@@ -52,6 +53,7 @@ export function fetchOrder(userId) {
     }
   }
 }
+
 export function deleteItem(userId, productId) {
   return async function(dispatch) {
     try {
@@ -105,6 +107,7 @@ export function putToOrder(productId, userId, quantity) {
     }
   }
 }
+
 /*
  * Reducer
  */
@@ -116,6 +119,10 @@ export default function orderReducer(state = initialState, action) {
     case SET_ORDER: {
       console.log('inside of set order action')
       return action.order
+    }
+    case SET_PURCHASES: {
+      console.log('inside of set purchases action')
+      return action.purchases
     }
 
     case REMOVE_ITEM:
