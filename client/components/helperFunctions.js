@@ -1,4 +1,12 @@
 export const binarySearch = (productArr, chairId) => {
+  productArr = productArr.sort(function(a, b) {
+    if (a.id > b.id) return 1
+    else if (a.id < b.id) return -1
+    else return 0
+  })
+
+  console.log('ARRAY AFTER SORT', productArr)
+
   let l = 0
   let r = productArr.length - 1
   let idx = -1
