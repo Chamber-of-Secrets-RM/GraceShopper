@@ -116,7 +116,11 @@ class ShoppingCart extends Component {
               handleSubmit={this.handleSubmit}
             />
           ))}
-          {/* <div>Total: ${placeholder}</div> */}
+          <div>
+            Total: ${this.props.cartInfo.reduce((accumulator, chair) => {
+              return (accumulator += chair.price * chair.ordersChairs.quantity)
+            }, 0)}
+          </div>
           <button>Checkout</button>
         </div>
       )

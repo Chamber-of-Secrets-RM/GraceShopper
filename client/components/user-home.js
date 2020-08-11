@@ -8,6 +8,8 @@ import {
 } from '../store/orderHistory'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder, clearOrder} from '../store/order'
+import {fetchProducts} from '../store/products'
+import ProductElement from './ProductElement'
 
 /**
  * COMPONENT
@@ -20,7 +22,9 @@ export class UserHome extends Component {
       isAdminChecked: false
     }
   }
-
+  componentDidMount() {
+    this.props.fetchProducts()
+  }
   async componentDidUpdate() {
     if (this.state.quantity === 1) {
       this.setState({quantity: this.state.quantity + 1})
@@ -53,24 +57,30 @@ export class UserHome extends Component {
   }
 
   render() {
+    const {products} = this.props
+    //Displaying 4 random products to be featured
+    const array = [
+      products[Math.floor(products.length * Math.random())],
+      products[Math.floor(products.length * Math.random())],
+      products[Math.floor(products.length * Math.random())],
+      products[Math.floor(products.length * Math.random())]
+    ]
+    console.log('should have numvers', array)
     return (
       <div>
         <h3>Chamber of Furniture</h3>
         <h3>
-          <small>About Us:</small>
+          <small>Featured Items:</small>
+          <div className="product-container-feature">
+            {array[0] === undefined ? (
+              <div>No available Products</div>
+            ) : (
+              array.map(chair => {
+                return <ProductElement key={chair.id} product={chair} />
+              })
+            )}
+          </div>
         </h3>
-        <p>Yo yo yo, ma dawg.</p>
-
-        <p>quantity is {this.state.quantity}</p>
-        <button onClick={() => this.handleClick()}>
-          increment quantity of state
-        </button>
-        {this.props.user ? <p>logged in</p> : <p>not logged in</p>}
-        {this.props.order ? (
-          <p>{this.props.order.length}</p>
-        ) : (
-          <p>nothing in order</p>
-        )}
       </div>
     )
   }
@@ -84,7 +94,8 @@ const mapState = state => {
     email: state.user.email,
     user: state.user.user,
     order: state.order,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    products: state.products
   }
 }
 const mapDispatch = dispatch => {
@@ -93,11 +104,11 @@ const mapDispatch = dispatch => {
     fetchAllPurchases: () => dispatch(fetchAllPurchases()),
     fetchUserSpecificPurchases: userId =>
       dispatch(fetchUserSpecificPurchases(userId)),
-
     postToOrder: (orderId, product, quantity) =>
       dispatch(postToOrder(orderId, product, quantity)),
     putToOrder: (orderId, product, quantity) =>
-      dispatch(putToOrder(orderId, product, quantity))
+      dispatch(putToOrder(orderId, product, quantity)),
+    fetchProducts: () => dispatch(fetchProducts())
   }
 }
 

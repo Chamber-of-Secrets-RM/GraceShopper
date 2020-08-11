@@ -130,10 +130,10 @@ class SingleItem extends Component {
             <img src={singleProduct.imageUrl} />
           </div>
           <div>Price: ${singleProduct.price}</div>
+          <div>Tags:{singleProduct.tags.map(tag => tag.name).join(', ')}</div>
           <h1>
             <small>Description:</small>
           </h1>
-          <div>Tags:{singleProduct.tags.map(tag => tag.name).join(', ')}</div>
           <p>{singleProduct.description}</p>
           <form onSubmit={this.handleSubmit}>
             <input
