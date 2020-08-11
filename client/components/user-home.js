@@ -5,6 +5,7 @@ import {fetchOrder} from '../store/order'
 import {fetchAllPurchases} from '../store/orderHistory'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder} from '../store/order'
+import LineGraph from './lineGraph'
 
 /**
  * COMPONENT
@@ -55,6 +56,7 @@ export class UserHome extends Component {
           <small>About Us:</small>
         </h3>
         <p>Yo yo yo, ma dawg.</p>
+
         <p>quantity is {this.state.quantity}</p>
         <button onClick={() => this.handleClick()}>
           increment quantity of state

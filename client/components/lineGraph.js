@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {scaleLinear} from 'd3-scale'
+import {scaleLinear, scaleTime} from 'd3-scale'
 import {select} from 'd3-selection'
-import {max} from 'd3-array'
+import {max, extent} from 'd3-array'
 import {axisBottom, axisLeft} from 'd3-axis'
 import {line} from 'd3-shape'
+import {connect} from 'react-redux'
 
 class LineGraph extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class LineGraph extends Component {
     this.createLineGraph = this.createLineGraph.bind(this)
   }
   componentDidMount() {
+    console.log('COMPONENT DID MOUNT LINE GRAPHXXX?')
     this.createLineGraph()
   }
   // componentDidUpdate() {
@@ -18,32 +20,33 @@ class LineGraph extends Component {
   // }
   createLineGraph() {
     console.log('creating a line graph')
+    console.log('what are my props', this.props)
     const node = this.node
 
     let margin = {top: 10, right: 30, bottom: 30, left: 60}
     let width = 460 - margin.left - margin.right
     let height = 400 - margin.top - margin.bottom
     let testArray = []
-    let testObj1 = {
-      y: 1,
-      x: 1
+    let hashTable = {}
+    for (let element of this.props.orderHistory) {
+      let x = element.updatedAt
+      if (element.quantity in hashTable) {
+        hashTable[x] += parseInt(element.quantity)
+      } else {
+        hashTable[x] = parseInt(element.quantity)
+      }
     }
-    let testObj2 = {
-      y: 4,
-      x: 20
+    console.log('what is my hashTable', hashTable)
+    for (let key of Object.keys(hashTable)) {
+      console.log()
+      let newObj = {
+        x: key,
+        y: hashTable[key]
+      }
+      testArray.push(newObj)
     }
-    let testObj3 = {
-      y: 9,
-      x: 30
-    }
-    let testObj4 = {
-      y: 50,
-      x: 100
-    }
-    testArray.push(testObj1)
-    testArray.push(testObj2)
-    testArray.push(testObj3)
-    testArray.push(testObj4)
+
+    console.log('WHAT IS MY TEST ARRAY', testArray)
 
     let svg = select(node)
       .append('svg')
@@ -52,13 +55,12 @@ class LineGraph extends Component {
       .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-    let x = scaleLinear()
-      .domain([
-        0,
-        max(testArray, function(d) {
-          return +d.x
+    let x = scaleTime()
+      .domain(
+        extent(testArray, function(d) {
+          return d.x
         })
-      ])
+      )
       .range([0, width])
     svg
       .append('g')
@@ -96,7 +98,23 @@ class LineGraph extends Component {
   }
 
   render() {
-    return <div id="my_dataviz" ref={node => (this.node = node)} />
+    console.log('RENDERING LINE GRAPH')
+    if (!this.props.orderHistory) {
+      return <div>hello</div>
+    } else {
+      return (
+        <div>
+          {/* <div>{this.props.orderHistory[0].quantity}</div> */}
+          <div id="my_dataviz" ref={node => (this.node = node)} />
+        </div>
+      )
+    }
   }
 }
-export default LineGraph
+const mapState = state => {
+  return {
+    orderHistory: state.orderHistory
+  }
+}
+
+export default connect(mapState, null)(LineGraph)

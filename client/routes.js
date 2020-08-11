@@ -8,9 +8,9 @@ import {
   UserHome,
   AllProducts,
   SingleItem,
-  ShoppingCart,
-  LineGraph
+  ShoppingCart
 } from './components'
+import LineGraph from './components/lineGraph'
 import {me} from './store'
 import {fetchOrder} from './store/order'
 
