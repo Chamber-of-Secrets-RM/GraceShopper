@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
-import {fetchOrder} from '../store/order'
-import {deleteItem, clearOrder} from '../store/order'
+
+import {deleteItem, clearOrder, fetchOrder} from '../store/order'
+
 import {fetchProducts} from '../store/products'
 import {binarySearch} from './helperFunctions'
 import {Link} from 'react-router-dom'

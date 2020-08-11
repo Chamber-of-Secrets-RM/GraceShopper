@@ -25,6 +25,9 @@ router.get('/:chairId', async (req, res, next) => {
     const data = await Chair.findOne({
       where: {
         id: req.params.chairId
+      },
+      include: {
+        model: Tags
       }
     })
     res.json(data)
@@ -47,8 +50,9 @@ router.post('/', isAdminMiddleware, async (req, res, next) => {
 router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
   try {
     const chairInstance = await Chair.findByPk(req.params.chairId)
+    console.log('THis is the chairInst', chairInstance)
     const data = await chairInstance.update(req.body)
-    console.log('WHAT IS MY DATA IN PUT', data)
+    console.log('🦆This is the req:', req.body)
     res.json(data)
   } catch (error) {
     next(error)
@@ -66,7 +70,6 @@ router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
 // api/chairs/:chairId => Deletes chair from Chair model in db
 router.delete('/:chairId', isAdminMiddleware, async (req, res, next) => {
   try {
-    console.log('this is the req and res in delete route for CHARI :', req.user)
     Chair.destroy({
       where: {
         id: req.params.chairId
