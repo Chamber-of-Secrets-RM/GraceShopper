@@ -1,6 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchProducts} from '../store/products'
+import {timeParse} from 'd3-time-format'
+import {convertTime} from './helperFunctions'
 
 /**
  * COMPONENT
@@ -27,11 +29,11 @@ class UserOrderHistory extends React.Component {
           return (
             <div>
               <p>
-                You bought {val.quantity} amount of{' '}
-                {this.props.products[val.chairId].name} chairs for a total of{' '}
-                {val.itemTotal}
+                You bought {val.quantity}{' '}
+                {this.props.products[val.chairId].name} chair(z) for a total of
+                $ {val.itemTotal} dollars
               </p>
-              <p>Date of purchase {val.updatedAt}</p>
+              <p>Date of purchase: {convertTime(val.updatedAt)}</p>
             </div>
           )
         })}
