@@ -4,6 +4,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {postToOrder, putToOrder} from '../store/order'
 import {fetchSingleProduct} from '../store/single-product'
+import Axios from 'axios'
 /**
  * COMPONENT
  */
@@ -16,6 +17,7 @@ class SingleItem extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.deleteItem = this.deleteItem.bind(this)
   }
   componentDidMount() {
     const chairId = this.props.match.params.chairId
@@ -96,10 +98,18 @@ class SingleItem extends Component {
       }
     }
   }
+  async deleteItem(itemId) {
+    console.log('these are the arguments', itemId)
+    await Axios.delete(`/api/chair/${itemId}`)
+  }
   render() {
     const {singleProduct} = this.props
 
-    if (singleProduct && singleProduct.id) {
+    if (
+      singleProduct &&
+      singleProduct.id &&
+      this.props.user.user.isAdmin === false
+    ) {
       return (
         <div className="single-product-view">
           <h1>{singleProduct.name}</h1>
@@ -121,6 +131,41 @@ class SingleItem extends Component {
             />
             <button type="submit">Add to cart</button>
           </form>
+        </div>
+      )
+    } else if (
+      singleProduct &&
+      singleProduct.id &&
+      this.props.user.user.isAdmin === true
+    ) {
+      return (
+        <div className="single-product-view">
+          <h1>Admin view</h1>
+          <h1>{singleProduct.name}</h1>
+          <div>
+            <img src={singleProduct.imageUrl} />
+          </div>
+          <div>Price: ${singleProduct.price}</div>
+          <h1>
+            <small>Description:</small>
+          </h1>
+          <p>{singleProduct.description}</p>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              name="quantity"
+              type="number"
+              min="1"
+              value={this.state.quantity}
+              onChange={this.handleChange}
+            />
+            <button type="submit">Add to cart</button>
+          </form>
+          <button
+            type="submit"
+            onClick={() => this.deleteItem(singleProduct.id)}
+          >
+            Remove item from Database
+          </button>
         </div>
       )
     } else {

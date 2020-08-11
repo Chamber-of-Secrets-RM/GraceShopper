@@ -14,7 +14,6 @@ const Chair = db.define('chair', {
     defaultValue: '/Images/chair_PNG6910.png'
   },
   price: {
-    //need a function to get the 'float number'
     type: Sequelize.INTEGER,
     allowNull: false,
     get() {

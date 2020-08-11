@@ -2,7 +2,27 @@ const router = require('express').Router()
 const {Chair} = require('../db/models')
 const isAdminMiddleware = require('./adminMiddleware')
 
-module.exports = router
+
+// move to a sepreate file and import as nessecary
+const isAdminMiddleware = (req, res, next) => {
+  if (!req.user) {
+    const error = new Error(
+      'You are not allowed to do this. The authorities have been notified!'
+    )
+    next(error)
+  }
+  const currentUser = req.user.dataValues
+  if (currentUser && currentUser.isAdmin) {
+    next()
+  } else {
+    const error = new Error(
+      'You are not allowed to do this. The authorities have been notified!'
+    )
+    error.status = 401
+    next(error)
+  }
+}
+
 
 //  api/chair/ => Gets ALL chairs
 router.get('/', async (req, res, next) => {
@@ -61,6 +81,7 @@ router.put('/:chairId', isAdminMiddleware, async (req, res, next) => {
 // api/chairs/:chairId => Deletes chair from Chair model in db
 router.delete('/:chairId', isAdminMiddleware, async (req, res, next) => {
   try {
+    console.log('this is the req and res in delete route for CHARI :', req.user)
     Chair.destroy({
       where: {
         id: req.params.chairId
