@@ -4,6 +4,7 @@ module.exports = router
 
 // move to a sepreate file and import as nessecary
 const isAdminMiddleware = (req, res, next) => {
+  // originaly req.session.user
   const currentUser = req.user.user
   console.log('CurrentUser in isAdmin', currentUser)
   if (currentUser && currentUser.isAdmin) {
