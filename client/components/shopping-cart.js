@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
-import {fetchOrder} from '../store/order'
-import {deleteItem} from '../store/order'
+import {fetchOrder, deleteItem} from '../store/order'
 import {fetchProducts} from '../store/products'
 
 /**

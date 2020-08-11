@@ -13,11 +13,13 @@ class SingleItem extends Component {
   constructor() {
     super()
     this.state = {
-      quantity: 1
+      quantity: 1,
+      putPrice: 1
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.deleteItem = this.deleteItem.bind(this)
+    this.handlePut = this.handlePut.bind(this)
   }
   componentDidMount() {
     const chairId = this.props.match.params.chairId
@@ -102,6 +104,9 @@ class SingleItem extends Component {
     console.log('these are the arguments', itemId)
     await Axios.delete(`/api/chair/${itemId}`)
   }
+  async handlePut(itemId, price) {
+    await Axios.put(`/api/chair/${itemId}`, {price: this.state.putPrice / 100})
+  }
   render() {
     const {singleProduct} = this.props
 
@@ -162,6 +167,20 @@ class SingleItem extends Component {
           >
             Remove item from Database
           </button>
+          <form
+            onSubmit={() =>
+              this.handlePut(singleProduct.id, this.state.putPrice)
+            }
+          >
+            <input
+              name="putPrice"
+              type="number"
+              min="0"
+              value={this.state.putPrice}
+              onChange={this.handleChange}
+            />
+            <button type="submit">Change Price in Database</button>
+          </form>
         </div>
       )
     } else {
