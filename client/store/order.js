@@ -15,6 +15,7 @@ export const setOrder = order => ({
   type: SET_ORDER,
   order
 })
+
 export const removeItem = productId => {
   return {
     type: REMOVE_ITEM,
@@ -52,6 +53,7 @@ export function fetchOrder(userId) {
     }
   }
 }
+
 export function deleteItem(userId, productId) {
   return async function(dispatch) {
     try {
@@ -105,6 +107,7 @@ export function putToOrder(productId, userId, quantity) {
     }
   }
 }
+
 /*
  * Reducer
  */
