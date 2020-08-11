@@ -6,11 +6,11 @@ import {deleteItem, clearOrder, fetchOrder} from '../store/order'
 
 import {fetchProducts} from '../store/products'
 import {binarySearch} from './helperFunctions'
+import {Link} from 'react-router-dom'
 
 /**
  * COMPONENT
  */
-
 class ShoppingCart extends Component {
   constructor() {
     super()
@@ -21,9 +21,7 @@ class ShoppingCart extends Component {
   }
   async componentDidMount() {
     console.log('inside shoppingCar CDM', this.props)
-
     // don't think we need this
-
     if (this.props.loggedOut) {
       this.props.clearOrder()
     } else {
@@ -35,13 +33,11 @@ class ShoppingCart extends Component {
   handleSubmit(user, userId, comparableChairId) {
     // needs to be the tested: correct parameter?
     event.preventDefault()
-
     console.log('INSIDE OF REMOVE FROM CART BUTTON, WHAT IOS USER', user)
     if (!user) {
       // guest user block
       let currentGuestOrder = JSON.parse(localStorage.getItem('guestOrder'))
       // console.log('currentGuestOrder', currentGuestOrder)
-
       currentGuestOrder = currentGuestOrder.filter(chair => {
         // console.log('COMPARING BETWEEN', comparableChairId, chair.chairId)
         return comparableChairId !== chair.chairId
@@ -64,7 +60,6 @@ class ShoppingCart extends Component {
     }
     //These are not real products
     console.log('this.props!!!!!!!!!!!!!!!!!!!!', this.props)
-
     // if this object is empty we know we are a guest
     if (Object.keys(this.props.cartInfo).length === 0) {
       let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
@@ -81,11 +76,9 @@ class ShoppingCart extends Component {
               let index = binarySearch(this.props.products, product.chairId)
               console.log('INDEX FROM OUR BINARY SEARCH IS', index)
               let imageUrl = this.props.products[index]
-
               // instead search through products to find chairId Index
               console.log('WHAT IS imageUIRL INSIDE OF SHOPPING CART', imageUrl)
               let name = this.props.products[index]
-
               return (
                 <CheckoutElement
                   key={product.chairId}
@@ -98,7 +91,9 @@ class ShoppingCart extends Component {
               )
             })}
 
-            <button>Checkout</button>
+            <Link to="/checkout">
+              <button type="button">Checkout</button>
+            </Link>
           </div>
         )
       }
@@ -117,7 +112,10 @@ class ShoppingCart extends Component {
             />
           ))}
           {/* <div>Total: ${placeholder}</div> */}
-          <button>Checkout</button>
+
+          <Link to="/checkout">
+            <button type="button">Checkout</button>
+          </Link>
         </div>
       )
     } else {
@@ -125,7 +123,6 @@ class ShoppingCart extends Component {
     }
   }
 }
-
 const mapState = state => {
   return {
     user: state.user.user,
@@ -144,5 +141,4 @@ const mapDispatch = dispatch => {
     fetchProducts: () => dispatch(fetchProducts())
   }
 }
-
 export default connect(mapState, mapDispatch)(ShoppingCart)
