@@ -4,13 +4,10 @@ import CheckoutElement from './Checkout-element'
 import {fetchOrder} from '../store/order'
 import {deleteItem, clearOrder} from '../store/order'
 import {fetchProducts} from '../store/products'
-import {Link} from 'react-router-dom'
-import BillingForm from './Billing-Form'
-
+import {binarySearch} from './helperFunctions'
 /**
  * COMPONENT
  */
-
 class ShoppingCart extends Component {
   constructor() {
     super()
@@ -20,10 +17,8 @@ class ShoppingCart extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   async componentDidMount() {
-    // console.log('inside shoppingCar CDM', this.props)
-
+    console.log('inside shoppingCar CDM', this.props)
     // don't think we need this
-
     if (this.props.loggedOut) {
       this.props.clearOrder()
     } else {
@@ -35,13 +30,11 @@ class ShoppingCart extends Component {
   handleSubmit(user, userId, comparableChairId) {
     // needs to be the tested: correct parameter?
     event.preventDefault()
-
     console.log('INSIDE OF REMOVE FROM CART BUTTON, WHAT IOS USER', user)
     if (!user) {
       // guest user block
       let currentGuestOrder = JSON.parse(localStorage.getItem('guestOrder'))
       // console.log('currentGuestOrder', currentGuestOrder)
-
       currentGuestOrder = currentGuestOrder.filter(chair => {
         // console.log('COMPARING BETWEEN', comparableChairId, chair.chairId)
         return comparableChairId !== chair.chairId
@@ -59,34 +52,15 @@ class ShoppingCart extends Component {
     }
   } // end of handleSubmit
   render() {
-    const binarySearch = (productArr, chairId) => {
-      let l = 0
-      let r = productArr.length - 1
-      let idx = -1
-      while (l < r) {
-        let m = Math.floor((l + r) / 2)
-
-        if (productArr[m].id == chairId) {
-          return m
-        } else if (productArr[m].id < chairId) {
-          l = m + 1
-        } else {
-          r = m
-        }
-      }
-      return idx
-    }
-
     if (this.props.products.length === 0) {
       return <div />
     }
     //These are not real products
-    console.log('this.props:', this.props)
-
+    console.log('this.props!!!!!!!!!!!!!!!!!!!!', this.props)
     // if this object is empty we know we are a guest
     if (Object.keys(this.props.cartInfo).length === 0) {
       let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
-      console.log('GUEST ORDER', guestOrder)
+      console.log(guestOrder)
       if (!guestOrder) {
         return <div>go buy some items</div>
       } else {
@@ -99,11 +73,9 @@ class ShoppingCart extends Component {
               let index = binarySearch(this.props.products, product.chairId)
               console.log('INDEX FROM OUR BINARY SEARCH IS', index)
               let imageUrl = this.props.products[index]
-
               // instead search through products to find chairId Index
               console.log('WHAT IS imageUIRL INSIDE OF SHOPPING CART', imageUrl)
               let name = this.props.products[index]
-
               return (
                 <CheckoutElement
                   key={product.chairId}
@@ -115,10 +87,7 @@ class ShoppingCart extends Component {
                 />
               )
             })}
-
-            <Link to="/checkout">
-              <button type="button">Checkout</button>
-            </Link>
+            <button>Checkout</button>
           </div>
         )
       }
@@ -137,9 +106,7 @@ class ShoppingCart extends Component {
             />
           ))}
           {/* <div>Total: ${placeholder}</div> */}
-          <Link to="/checkout">
-            <button type="button">Checkout</button>
-          </Link>
+          <button>Checkout</button>
         </div>
       )
     } else {
@@ -147,7 +114,6 @@ class ShoppingCart extends Component {
     }
   }
 }
-
 const mapState = state => {
   return {
     user: state.user.user,
@@ -166,5 +132,4 @@ const mapDispatch = dispatch => {
     fetchProducts: () => dispatch(fetchProducts())
   }
 }
-
 export default connect(mapState, mapDispatch)(ShoppingCart)
