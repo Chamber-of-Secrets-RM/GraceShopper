@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const {Chair} = require('../db/models')
-module.exports = router
+const isAdminMiddleware = require('./adminMiddleware')
+
 
 // move to a sepreate file and import as nessecary
 const isAdminMiddleware = (req, res, next) => {
@@ -21,6 +22,7 @@ const isAdminMiddleware = (req, res, next) => {
     next(error)
   }
 }
+
 
 //  api/chair/ => Gets ALL chairs
 router.get('/', async (req, res, next) => {

@@ -84,19 +84,30 @@ export const logout = () => async dispatch => {
  */
 const defaultUser = {
   user: {},
-  cart: {}
+  cart: {},
+  isAdmin: 0
 }
 
 export default function(state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
-      return {...state, user: action.user, cart: {}}
+      return {...state, user: action.user}
     case GET_USER_AND_CART:
-      return {
-        ...state,
-        user: action.userInfo.user,
-        cart: action.userInfo.cart.data
+      if (action.userInfo.user.isAdmin) {
+        return {
+          ...state,
+          user: action.userInfo.user,
+          cart: action.userInfo.cart.data,
+          isAdmin: 1
+        }
+      } else {
+        return {
+          ...state,
+          user: action.userInfo.user,
+          cart: action.userInfo.cart.data
+        }
       }
+
     case REMOVE_USER:
       return defaultUser
     default:

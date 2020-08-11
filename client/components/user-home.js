@@ -2,6 +2,10 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {fetchOrder} from '../store/order'
+import {
+  fetchAllPurchases,
+  fetchUserSpecificPurchases
+} from '../store/orderHistory'
 import {binarySearch} from './helperFunctions'
 import {postToOrder, putToOrder} from '../store/order'
 
@@ -12,7 +16,8 @@ export class UserHome extends Component {
   constructor() {
     super()
     this.state = {
-      quantity: 1
+      quantity: 1,
+      isAdminChecked: false
     }
   }
 
@@ -20,6 +25,12 @@ export class UserHome extends Component {
     if (this.state.quantity === 1) {
       this.setState({quantity: this.state.quantity + 1})
       await this.props.fetchOrder(this.props.user.id)
+
+      if (this.props.isAdmin) {
+        await this.props.fetchAllPurchases()
+      } else {
+        await this.props.fetchUserSpecificPurchases(this.props.user.id)
+      }
     }
 
     let currentGuestOrder = localStorage.getItem('guestOrder')
@@ -49,6 +60,7 @@ export class UserHome extends Component {
           <small>About Us:</small>
         </h3>
         <p>Yo yo yo, ma dawg.</p>
+
         <p>quantity is {this.state.quantity}</p>
         <button onClick={() => this.handleClick()}>
           increment quantity of state
@@ -71,12 +83,17 @@ const mapState = state => {
   return {
     email: state.user.email,
     user: state.user.user,
-    order: state.order
+    order: state.order,
+    isAdmin: state.user.isAdmin
   }
 }
 const mapDispatch = dispatch => {
   return {
     fetchOrder: userId => dispatch(fetchOrder(userId)),
+    fetchAllPurchases: () => dispatch(fetchAllPurchases()),
+    fetchUserSpecificPurchases: userId =>
+      dispatch(fetchUserSpecificPurchases(userId)),
+
     postToOrder: (orderId, product, quantity) =>
       dispatch(postToOrder(orderId, product, quantity)),
     putToOrder: (orderId, product, quantity) =>

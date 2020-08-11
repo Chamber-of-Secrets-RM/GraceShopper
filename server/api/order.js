@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const {Order, OrdersChairs, Chair} = require('../db/models')
 
+const {Op} = require('sequelize')
+
 module.exports = router
 
 // const isAdminOrProperUserMiddleware = (req, res, next) => {
@@ -44,17 +46,62 @@ router.get(
   // isAdminOrProperUserMiddleware,
   async (req, res, next) => {
     try {
-      const orders = await Order.findAll({
+      const ordersInstance = await Order.findAll({
         where: {
           userId: req.params.userId,
           isFulfilled: 1
-        },
-        include: {
-          model: Chair
         }
       })
+      let orderIdsArray = ordersInstance.map(val => {
+        return val.id
+      })
+      const data = await OrdersChairs.findAll({
+        where: {
+          orderId: {
+            [Op.in]: orderIdsArray
+          }
+        },
+        raw: true
+      })
       // check if admin or correct user //
-      res.json(orders)
+      console.log('WHAT IS MY DATA I AM GETTING FROM ORDERSCHAIRS', data)
+      res.json(data)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+// this route is used to get all fulfilled orders for ALL users (analytics page for admin)
+router.get(
+  // order history route
+  '/fulfilledOrders',
+  // isAdminOrProperUserMiddleware,
+  async (req, res, next) => {
+    try {
+      const ordersInstance = await Order.findAll({
+        where: {
+          isFulfilled: 1
+        }
+      })
+      console.log('what is order instance', ordersInstance)
+
+      let orderIdsArray = ordersInstance.map(val => {
+        return val.id
+      })
+
+      console.log('what are ordersIDs', orderIdsArray)
+
+      const data = await OrdersChairs.findAll({
+        where: {
+          orderId: {
+            [Op.in]: orderIdsArray
+          }
+        }
+      })
+
+      console.log('what is final data', data)
+      res.json(data)
+      // check if admin or correct user //
     } catch (err) {
       next(err)
     }
@@ -84,9 +131,14 @@ router.get(
 //to avoid bypassing prices defined on front end.
 router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
+    if (!req.user) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    }
+    console.log('THISIS THE REQ.USER: ', req.user)
     const [userOrderInstance] = await Order.findAll({
       where: {
-        userId: req.params.userId,
+        userId: req.user.dataValues.id,
         isFulfilled: 0 // 0 is unfulfilled, 1 is fulfilled
       }
     })
@@ -113,6 +165,10 @@ router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
 //Need to check order on front end to make sure chair is in the order/cart
 router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
+    if (!req.user) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    }
     const [userOrderInstance] = await Order.findAll({
       where: {
         userId: req.params.userId,
@@ -147,8 +203,35 @@ router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
   }
 })
 
+// set an order to fulfiled for testing( will need user implementation with security check after)
+router.put('/setFulfilled/:orderId', async (req, res, next) => {
+  try {
+    const [numUpdated, affectedRows] = await Order.update(
+      {
+        isFulfilled: 1
+        // itemTotal: currentChair.price * req.body.quantity
+      },
+      {
+        where: {
+          id: req.params.orderId
+        },
+        returning: true
+      }
+    )
+    console.log('WHAT IS NUMUPDATED', numUpdated)
+    console.log('WHAT IS DATA ON THE BACKEND fOR PUT', affectedRows)
+    res.json(affectedRows[0])
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.delete('/user/:userId/chair/:chairId/', async (req, res, next) => {
   try {
+    if (!req.user) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    }
     const [userOrderInstance] = await Order.findAll({
       where: {
         userId: req.params.userId,
