@@ -4,6 +4,8 @@ import CheckoutElement from './Checkout-element'
 import {fetchOrder} from '../store/order'
 import {deleteItem} from '../store/order'
 import {fetchProducts} from '../store/products'
+import {Link} from 'react-router-dom'
+import BillingForm from './Billing-Form'
 
 /**
  * COMPONENT
@@ -21,8 +23,10 @@ class ShoppingCart extends Component {
     // console.log('inside shoppingCar CDM', this.props)
 
     // don't think we need this
-    this.props.fetchOrder(this.props.user.id)
-    this.props.fetchProducts()
+    if (this.props.user.email) {
+      this.props.fetchOrder(this.props.user.id)
+      this.props.fetchProducts()
+    }
   }
   handleSubmit(user, userId, comparableChairId) {
     // needs to be the tested: correct parameter?
@@ -78,7 +82,7 @@ class ShoppingCart extends Component {
     // if this object is empty we know we are a guest
     if (Object.keys(this.props.cartInfo).length === 0) {
       let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
-      console.log(guestOrder)
+      console.log('GUEST ORDER', guestOrder)
       if (!guestOrder) {
         return <div>go buy some items</div>
       } else {
@@ -108,7 +112,9 @@ class ShoppingCart extends Component {
               )
             })}
 
-            <button>Checkout</button>
+            <Link to="/checkout">
+              <button type="button">Checkout</button>
+            </Link>
           </div>
         )
       }
@@ -127,7 +133,9 @@ class ShoppingCart extends Component {
             />
           ))}
           {/* <div>Total: ${placeholder}</div> */}
-          <button>Checkout</button>
+          <Link to="/checkout">
+            <button type="button">Checkout</button>
+          </Link>
         </div>
       )
     } else {
