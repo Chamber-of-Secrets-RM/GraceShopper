@@ -6,6 +6,7 @@ import {axisBottom, axisLeft} from 'd3-axis'
 import {line} from 'd3-shape'
 import {connect} from 'react-redux'
 import {convertTime} from './helperFunctions'
+import {timeParse} from 'd3-time-format'
 
 class LineGraph extends Component {
   constructor(props) {
@@ -39,10 +40,11 @@ class LineGraph extends Component {
       }
     }
     console.log('what is my hashTable', hashTable)
+    var parseTime = timeParse('%d-%b-%y')
     for (let key of Object.keys(hashTable)) {
       console.log()
       let newObj = {
-        x: key,
+        x: parseTime(key),
         y: hashTable[key]
       }
       testArray.push(newObj)
@@ -60,11 +62,13 @@ class LineGraph extends Component {
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     let x = scaleTime()
-      ///.domain([new Date("1972-02-24 00:00:00"), new Date("1972-03-06 00:00:00")])
-      .domain([
-        new Date('2020-08-05 00:00:00'),
-        new Date('2020-08-15 00:00:00')
-      ])
+    ///.domain([new Date("1972-02-24 00:00:00"), new Date("1972-03-06 00:00:00")])
+    x
+      .domain(
+        extent(testArray, function(d) {
+          return d.x
+        })
+      )
       .range([0, width])
     svg
       .append('g')

@@ -21,9 +21,51 @@ export const convertTime = sequelizeDate => {
 
   stringDate = sequelizeDate.slice(0, 10)
 
-  let suffix = ' 00:00:00'
+  let strArr = stringDate.split('-')
 
-  stringDate += suffix
+  let months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ]
+
+  let month = ''
+  if (strArr[1] == '01') {
+    month = 'Jan'
+  } else if (strArr[1] == '02') {
+    month = 'Feb'
+  } else if (strArr[1] == '03') {
+    month = 'Mar'
+  } else if (strArr[1] == '04') {
+    month = 'Apr'
+  } else if (strArr[1] == '05') {
+    month = 'May'
+  } else if (strArr[1] == '06') {
+    month = 'Jun'
+  } else if (strArr[1] == '07') {
+    month = 'Jul'
+  } else if (strArr[1] == '08') {
+    month = 'Aug'
+  } else if (strArr[1] == '09') {
+    month = 'Sep'
+  } else if (strArr[1] == '10') {
+    month = 'Oct'
+  } else if (strArr[1] == '11') {
+    month = 'Nov'
+  } else if (strArr[1] == '12') {
+    month = 'Dec'
+  }
+  let day = parseInt(strArr[2]).toString()
+  let year = strArr[0].toString().slice(2, 4)
+  stringDate = day + '-' + month + '-' + year
 
   return stringDate
 }
