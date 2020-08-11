@@ -18,6 +18,7 @@ class Navbar extends Component {
       display: flex;
       height: 3rem;
       align-items: center;
+      margin-bottom: 3rem;
     `
     const LoginDiv = styled.div`
       width: 100%;
@@ -56,8 +57,13 @@ class Navbar extends Component {
               <Link className="nav-link" to="/salesGraph">
                 Analytics
               </Link>
-            ) : null}
-            <a href="#" onClick={this.props.handleClick}>
+            ) : (
+              <Link className="nav-link" to="/userOrderHistory">
+                Order History
+              </Link>
+            )}
+
+            <a className="nav-link" href="#" onClick={this.props.handleClick}>
               Logout
             </a>
           </PageLinks>

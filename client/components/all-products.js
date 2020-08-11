@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import ProductElement from './ProductElement'
 import {fetchProducts} from '../store/products'
+import {fetchTags} from '../store/tags'
 import Pagination from './Pagination'
 
 /**
@@ -14,13 +15,17 @@ class AllProducts extends React.Component {
     this.state = {
       //FrontEnd Pagination
       currentPage: 1,
-      chairsPerPage: 15
+      chairsPerPage: 15,
+      //filter products
+      tagId: 'null'
     }
     this.handlePage = this.handlePage.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
     this.props.getChairs()
+    this.props.fetchTags()
   }
   //Pagination Handler
   handlePage(pageNumber) {
@@ -28,24 +33,57 @@ class AllProducts extends React.Component {
       currentPage: pageNumber
     })
   }
-
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
   render() {
     const {products} = this.props
+    let filteredProducts = []
+    //Filter products if set
+    const {tagId} = this.state
+    if (tagId !== 'null') {
+      filteredProducts = products.filter(product => {
+        //Check the tags array on product instance
+        for (let i = 0; i < product.tags.length; i++) {
+          //tagId is being assigned to a string value from handleChange
+          if (parseInt(tagId) === product.tags[i].id) return true
+        }
+        return false
+      })
+    } else {
+      filteredProducts = products
+    }
+    console.log('render in all-products:', filteredProducts)
     //Pagination indexes
     const {currentPage, chairsPerPage} = this.state
     const indexEndOfPage = currentPage * chairsPerPage
     const indexStartOfPage = indexEndOfPage - chairsPerPage
-    const currentPageChairs = products.slice(indexStartOfPage, indexEndOfPage)
+    const currentPageChairs = filteredProducts.slice(
+      indexStartOfPage,
+      indexEndOfPage
+    )
 
     return (
       <div>
+        <div>
+          <select name="tagId" value={this.filter} onChange={this.handleChange}>
+            <option value="null">-Select a category-</option>
+            {this.props.tags.map(tag => (
+              <option value={tag.id} key={tag.id}>
+                {tag.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <Pagination
           postsPerPage={chairsPerPage}
-          totalPosts={products.length}
+          totalPosts={filteredProducts.length}
           handlePage={this.handlePage}
         />
         <div className="product-container">
-          {products.length === 0 ? (
+          {filteredProducts.length === 0 ? (
             <div>No available Products</div>
           ) : (
             currentPageChairs.map(chair => {
@@ -60,13 +98,15 @@ class AllProducts extends React.Component {
 
 const mapState = state => {
   return {
-    products: state.products
+    products: state.products,
+    tags: state.tags
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getChairs: () => dispatch(fetchProducts())
+    getChairs: () => dispatch(fetchProducts()),
+    fetchTags: () => dispatch(fetchTags())
   }
 }
 

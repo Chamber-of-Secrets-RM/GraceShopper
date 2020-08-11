@@ -11,6 +11,7 @@ import {
   ShoppingCart
 } from './components'
 import LineGraph from './components/lineGraph'
+import UserOrderHistory from './components/userOrderHistory'
 import {me} from './store'
 import {fetchOrder} from './store/order'
 import BillingForm from './components/Billing-Form'
@@ -39,6 +40,7 @@ class Routes extends Component {
         <Route path="/shop" component={AllProducts} />
         <Route path="/cart" component={ShoppingCart} />
         <Route path="/products/:chairId" component={SingleItem} />
+        <Route path="/userOrderHistory" component={UserOrderHistory} />
         <Route path="/salesGraph" component={LineGraph} />
         <Route path="/checkout" component={BillingForm} />
         {/* <Route path="/checkout/:cartId" component={newCheckoutElm} /> */}

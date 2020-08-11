@@ -7,7 +7,7 @@ import {
   fetchUserSpecificPurchases
 } from '../store/orderHistory'
 import {binarySearch} from './helperFunctions'
-import {postToOrder, putToOrder} from '../store/order'
+import {postToOrder, putToOrder, clearOrder} from '../store/order'
 
 /**
  * COMPONENT

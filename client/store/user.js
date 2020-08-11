@@ -69,7 +69,7 @@ export const logout = () => async dispatch => {
   try {
     await axios.post('/auth/logout')
     dispatch(removeUser())
-    history.push('/login')
+    history.push('/home')
   } catch (err) {
     console.error(err)
   }
@@ -85,7 +85,8 @@ export const logout = () => async dispatch => {
 const defaultUser = {
   user: {},
   cart: {},
-  isAdmin: 0
+  isAdmin: 0,
+  loggedOut: true
 }
 
 export default function(state = defaultUser, action) {
@@ -98,18 +99,25 @@ export default function(state = defaultUser, action) {
           ...state,
           user: action.userInfo.user,
           cart: action.userInfo.cart.data,
-          isAdmin: 1
+          isAdmin: 1,
+          loggedOut: false
         }
       } else {
         return {
           ...state,
           user: action.userInfo.user,
-          cart: action.userInfo.cart.data
+          cart: action.userInfo.cart.data,
+          loggedOut: false
         }
       }
-
     case REMOVE_USER:
-      return defaultUser
+      let newObj = {
+        user: {},
+        cart: {},
+        isAdmin: 0,
+        loggedOut: true
+      }
+      return newObj
     default:
       return state
   }

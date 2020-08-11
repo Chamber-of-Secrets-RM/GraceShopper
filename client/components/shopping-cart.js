@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
 import {fetchOrder} from '../store/order'
-import {deleteItem} from '../store/order'
+import {deleteItem, clearOrder} from '../store/order'
 import {fetchProducts} from '../store/products'
 import {Link} from 'react-router-dom'
 import BillingForm from './Billing-Form'
@@ -23,10 +23,14 @@ class ShoppingCart extends Component {
     // console.log('inside shoppingCar CDM', this.props)
 
     // don't think we need this
-    if (this.props.user.email) {
+
+    if (this.props.loggedOut) {
+      this.props.clearOrder()
+    } else {
+      console.log('IS THIS RUNNING WHEN I LOG OUT?!?!?!??')
       this.props.fetchOrder(this.props.user.id)
-      this.props.fetchProducts()
     }
+    this.props.fetchProducts()
   }
   handleSubmit(user, userId, comparableChairId) {
     // needs to be the tested: correct parameter?
@@ -149,11 +153,13 @@ const mapState = state => {
     user: state.user.user,
     cart: state.user.cart, // if empty we know we are a guest
     cartInfo: state.order,
-    products: state.products
+    products: state.products,
+    loggedOut: state.user.loggedOut
   }
 }
 const mapDispatch = dispatch => {
   return {
+    clearOrder: () => dispatch(clearOrder()),
     fetchOrder: userId => dispatch(fetchOrder(userId)),
     deleteItem: (orderId, productId) =>
       dispatch(deleteItem(orderId, productId)),
