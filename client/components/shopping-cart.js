@@ -4,6 +4,7 @@ import CheckoutElement from './Checkout-element'
 import {fetchOrder} from '../store/order'
 import {deleteItem, clearOrder} from '../store/order'
 import {fetchProducts} from '../store/products'
+import {binarySearch} from './helperFunctions'
 
 /**
  * COMPONENT
@@ -18,7 +19,7 @@ class ShoppingCart extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   async componentDidMount() {
-    // console.log('inside shoppingCar CDM', this.props)
+    console.log('inside shoppingCar CDM', this.props)
 
     // don't think we need this
 
@@ -57,29 +58,11 @@ class ShoppingCart extends Component {
     }
   } // end of handleSubmit
   render() {
-    const binarySearch = (productArr, chairId) => {
-      let l = 0
-      let r = productArr.length - 1
-      let idx = -1
-      while (l < r) {
-        let m = Math.floor((l + r) / 2)
-
-        if (productArr[m].id == chairId) {
-          return m
-        } else if (productArr[m].id < chairId) {
-          l = m + 1
-        } else {
-          r = m
-        }
-      }
-      return idx
-    }
-
     if (this.props.products.length === 0) {
       return <div />
     }
     //These are not real products
-    console.log('this.props:', this.props)
+    console.log('this.props!!!!!!!!!!!!!!!!!!!!', this.props)
 
     // if this object is empty we know we are a guest
     if (Object.keys(this.props.cartInfo).length === 0) {
