@@ -4,6 +4,7 @@ import axios from 'axios'
  * Action Type
  */
 const SET_ORDER = 'SET_ORDER'
+const CLEAR_ORDER = 'CLEAR_ORDER'
 const REMOVE_ITEM = 'REMOVE_ITEM'
 const UPDATE_QUANTITY = 'UPDATE_QUANTITY'
 const ADD_TO_ORDER = 'ADD_TO_ORDER'
@@ -35,6 +36,13 @@ export const addToOrder = productData => {
   return {
     type: ADD_TO_ORDER,
     productData
+  }
+}
+export const clearOrder = () => {
+  console.log('WHAT IS CLEAR ORDER ACTION')
+
+  return {
+    type: CLEAR_ORDER
   }
 }
 
@@ -118,6 +126,9 @@ export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_ORDER: {
       return action.order
+    }
+    case CLEAR_ORDER: {
+      return []
     }
 
     case REMOVE_ITEM:

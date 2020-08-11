@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import CheckoutElement from './Checkout-element'
 import {fetchOrder} from '../store/order'
-import {deleteItem} from '../store/order'
+import {deleteItem, clearOrder} from '../store/order'
 import {fetchProducts} from '../store/products'
 
 /**
@@ -21,7 +21,13 @@ class ShoppingCart extends Component {
     // console.log('inside shoppingCar CDM', this.props)
 
     // don't think we need this
-    this.props.fetchOrder(this.props.user.id)
+
+    if (this.props.loggedOut) {
+      this.props.clearOrder()
+    } else {
+      console.log('IS THIS RUNNING WHEN I LOG OUT?!?!?!??')
+      this.props.fetchOrder(this.props.user.id)
+    }
     this.props.fetchProducts()
   }
   handleSubmit(user, userId, comparableChairId) {
@@ -141,11 +147,13 @@ const mapState = state => {
     user: state.user.user,
     cart: state.user.cart, // if empty we know we are a guest
     cartInfo: state.order,
-    products: state.products
+    products: state.products,
+    loggedOut: state.user.loggedOut
   }
 }
 const mapDispatch = dispatch => {
   return {
+    clearOrder: () => dispatch(clearOrder()),
     fetchOrder: userId => dispatch(fetchOrder(userId)),
     deleteItem: (orderId, productId) =>
       dispatch(deleteItem(orderId, productId)),
