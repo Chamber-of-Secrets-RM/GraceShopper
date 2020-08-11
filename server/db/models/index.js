@@ -2,6 +2,8 @@ const User = require('./user')
 const Order = require('./order')
 const Chair = require('./chair')
 const OrdersChairs = require('./ordersChairs')
+const Tags = require('./tags')
+const ChairTags = require('./chairTags')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -20,5 +22,7 @@ module.exports = {
   User,
   Order,
   Chair,
-  OrdersChairs
+  OrdersChairs,
+  Tags,
+  ChairTags
 }
