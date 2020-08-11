@@ -98,8 +98,8 @@ class SingleItem extends Component {
       }
     }
   }
-  async deleteItem(req, itemId) {
-    console.log(req.body)
+  async deleteItem(itemId) {
+    console.log('these are the arguments', itemId)
     await Axios.delete(`/api/chair/${itemId}`)
   }
   render() {
@@ -162,7 +162,7 @@ class SingleItem extends Component {
           </form>
           <button
             type="submit"
-            onClick={() => this.deleteItem(this.user.isAdmin, singleProduct.id)}
+            onClick={() => this.deleteItem(singleProduct.id)}
           >
             Remove item from Database
           </button>
