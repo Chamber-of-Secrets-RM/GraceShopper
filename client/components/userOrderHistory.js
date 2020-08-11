@@ -15,10 +15,18 @@ class UserOrderHistory extends React.Component {
   //Pagination Handler
 
   render() {
+    console.log('IN RENDER OF USERORDER HISTORY', this.props)
     return (
       <div>
         {this.props.orderHistory.map(val => {
-          return <p>{val.id}</p>
+          return (
+            <div>
+              <p>
+                You bought {val.quantity} chairs for a total of {val.itemTotal}
+              </p>
+              <p>Date of purchase {val.updatedAt}</p>
+            </div>
+          )
         })}
       </div>
     )

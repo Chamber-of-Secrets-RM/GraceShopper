@@ -56,7 +56,12 @@ class Navbar extends Component {
               <Link className="nav-link" to="/salesGraph">
                 Analytics
               </Link>
-            ) : null}
+            ) : (
+              <Link className="nav-link" to="/userOrderHistory">
+                Order History
+              </Link>
+            )}
+
             <a href="#" onClick={this.props.handleClick}>
               Logout
             </a>
