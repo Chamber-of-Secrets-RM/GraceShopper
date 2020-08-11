@@ -58,7 +58,7 @@ class BillingForm extends React.Component {
           <input
             name="cardNumber"
             type="text"
-            placeholder="DON'T ENTER YOUR REAL CC NUMBER HERE. DON'T DO IT FOR REAL"
+            placeholder="Not a real CC...SERIOUSLY"
             value={this.state.cardNumber}
             onChange={this.handleChange}
           />
