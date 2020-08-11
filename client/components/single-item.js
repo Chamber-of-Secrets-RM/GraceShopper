@@ -3,8 +3,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {postToOrder, putToOrder} from '../store/order'
-import {fetchSingleProduct} from '../store/single-product'
-import Axios from 'axios'
+import {fetchSingleProduct, changeProduct} from '../store/single-product'
+import {deleteItem, deleteProduct} from '../store/products'
+
 /**
  * COMPONENT
  */
@@ -13,11 +14,14 @@ class SingleItem extends Component {
   constructor() {
     super()
     this.state = {
-      quantity: 1
+      quantity: 1,
+      putPrice: 1,
+      putDescription: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.deleteItem = this.deleteItem.bind(this)
+    this.handlePut = this.handlePut.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
   componentDidMount() {
     const chairId = this.props.match.params.chairId
@@ -98,9 +102,22 @@ class SingleItem extends Component {
       }
     }
   }
-  async deleteItem(itemId) {
-    console.log('these are the arguments', itemId)
-    await Axios.delete(`/api/chair/${itemId}`)
+  handlePut(event) {
+    event.preventDefault()
+    const newChair = {
+      id: this.props.singleProduct.id,
+      price: this.state.putPrice,
+      description: this.state.putDescription
+    }
+    console.log('🧐this is the handlePut', newChair)
+    this.props.changeProduct(newChair)
+  }
+  handleDelete(event) {
+    event.preventDefault()
+    const chair = {
+      id: this.props.singleProduct.id
+    }
+    this.props.deleteItem(chair)
   }
   render() {
     const {singleProduct} = this.props
@@ -135,6 +152,7 @@ class SingleItem extends Component {
       singleProduct.id &&
       this.props.user.user.isAdmin === true
     ) {
+      console.log('🍣PROPS', this.props, '🧐STATE', this.state)
       return (
         <div className="single-product-view">
           <h1>Admin view</h1>
@@ -157,12 +175,28 @@ class SingleItem extends Component {
             />
             <button type="submit">Add to cart</button>
           </form>
-          <button
-            type="submit"
-            onClick={() => this.deleteItem(singleProduct.id)}
-          >
+          <button type="button" onClick={this.handleDelete}>
             Remove item from Database
           </button>
+          <form onSubmit={this.handlePut}>
+            <input
+              name="putPrice"
+              type="float"
+              min="0"
+              value={this.state.putPrice}
+              onChange={this.handleChange}
+            />
+            <button type="submit">Change Price in Database</button>
+          </form>
+          <form onSubmit={this.handlePut}>
+            <input
+              name="putDescription"
+              type="text"
+              value={this.state.putDescription}
+              onChange={this.handleChange}
+            />
+            <button type="submit">Change Description in Database</button>
+          </form>
         </div>
       )
     } else {
@@ -185,7 +219,9 @@ const mapDispatch = dispatch => {
       dispatch(postToOrder(orderId, product, quantity)),
     putToOrder: (orderId, product, quantity) =>
       dispatch(putToOrder(orderId, product, quantity)),
-    fetchSingleProduct: chairId => dispatch(fetchSingleProduct(chairId))
+    fetchSingleProduct: chairId => dispatch(fetchSingleProduct(chairId)),
+    changeProduct: chair => dispatch(changeProduct(chair)),
+    deleteItem: chair => dispatch(deleteItem(chair))
   }
 }
 
