@@ -44,8 +44,14 @@ router.get(
   // order history route
   '/user/:userId/History/',
   // isAdminOrProperUserMiddleware,
+
   async (req, res, next) => {
     try {
+      if (!req.session.userId) {
+        // test with both session and req.user in morning?
+        res.sendStatus(505)
+        throw new Error('This user is not allowed to access this order')
+      }
       const ordersInstance = await Order.findAll({
         where: {
           userId: req.params.userId,
@@ -132,7 +138,8 @@ router.get(
 //to avoid bypassing prices defined on front end.
 router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.session.userId) {
+      // test with both session and req.user in morning?
       res.sendStatus(505)
       throw new Error('This user is not allowed to access this order')
     }
