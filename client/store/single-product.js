@@ -58,7 +58,7 @@ export default function singleProductReducer(state = initialState, action) {
     case SET_SINGLE_PRODUCT:
       return action.singleProduct
     case UPDATE_PRODUCT:
-      return action.singleProduct
+      return {...state, singleProduct: action.singleProduct.id}
     default:
       return state
   }
