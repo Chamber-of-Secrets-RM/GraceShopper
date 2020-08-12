@@ -34,7 +34,7 @@ export default function ChildBillingForm(props) {
         onChange={props.handleChange}
       />
 
-      <button type="submit">Add to cart</button>
+      <button type="submit">Confirm Order</button>
     </form>
   )
 }

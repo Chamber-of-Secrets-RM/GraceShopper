@@ -47,8 +47,7 @@ class BillingForm extends React.Component {
       await this.props.setFulfilled(this.props.user.id, this.props.cart.id)
       await this.props.fetchOrder(this.props.user.id)
       await this.props.getEmptyCartAndUser(data)
-      localStorage.clear()
-      history.push('/home')
+
       // const {addToast} = useToasts()
       // addToast('Congrats on the chairs bro!', {appearance: 'success'})
       //toast

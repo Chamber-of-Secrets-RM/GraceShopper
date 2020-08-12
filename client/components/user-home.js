@@ -23,7 +23,7 @@ export class UserHome extends Component {
     }
   }
   componentDidMount() {
-    // this.props.fetchProducts()
+    this.props.fetchProducts()
   }
   async componentDidUpdate() {
     if (this.state.quantity === 1) {
