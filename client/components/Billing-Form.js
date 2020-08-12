@@ -2,6 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {fetchOrder, setFulfilled} from '../store/order'
 import {fetchProducts} from '../store/products'
+import {getEmptyCartAndUser} from '../store/user'
+
+import {useToasts} from 'react-toast-notifications'
 
 class BillingForm extends React.Component {
   constructor() {
@@ -34,10 +37,17 @@ class BillingForm extends React.Component {
   async handleSubmit(e) {
     e.preventDefault()
     console.log('made it into handle submit')
+    let data = {
+      // special formatting for getEmptyCartAndUser
+      id: this.props.user.id
+    }
     if (this.props.user.email) {
       console.log('made it into here?!?!??!??!??!?!?!?!!?')
       await this.props.setFulfilled(this.props.user.id, this.props.cart.id)
       await this.props.fetchOrder(this.props.user.id)
+      await this.props.getEmptyCartAndUser(data)
+      const {addToast} = useToasts()
+      addToast('Congrats on the chairs bro!', {appearance: 'success'})
       //toast
     }
   }
@@ -92,7 +102,8 @@ const mapDispatch = dispatch => {
   return {
     fetchOrder: userId => dispatch(fetchOrder(userId)),
     setFulfilled: (userId, orderId) => dispatch(setFulfilled(userId, orderId)),
-    fetchProducts: () => dispatch(fetchProducts())
+    fetchProducts: () => dispatch(fetchProducts()),
+    getEmptyCartAndUser: data => dispatch(getEmptyCartAndUser(data))
   }
 }
 export default connect(mapState, mapDispatch)(BillingForm)
