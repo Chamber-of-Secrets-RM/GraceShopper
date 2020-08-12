@@ -28,7 +28,9 @@ export class UserHome extends Component {
   async componentDidUpdate() {
     if (this.state.quantity === 1) {
       this.setState({quantity: this.state.quantity + 1})
-      await this.props.fetchOrder(this.props.user.id)
+      if (this.props.user.id) {
+        await this.props.fetchOrder(this.props.user.id)
+      }
 
       if (this.props.isAdmin) {
         await this.props.fetchAllPurchases()
