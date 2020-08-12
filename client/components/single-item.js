@@ -110,7 +110,6 @@ class SingleItem extends Component {
       price: this.state.putPrice,
       description: this.state.putDescription
     }
-    console.log('🧐this is the handlePut', newChair)
     this.props.changeProduct(newChair)
   }
   handleDelete(event) {
