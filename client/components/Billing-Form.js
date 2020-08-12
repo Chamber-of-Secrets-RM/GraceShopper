@@ -3,8 +3,8 @@ import {connect} from 'react-redux'
 import {fetchOrder, setFulfilled} from '../store/order'
 import {fetchProducts} from '../store/products'
 import {getEmptyCartAndUser} from '../store/user'
-
-import {useToasts} from 'react-toast-notifications'
+import ChildBillingForm from './ChildBillingForm'
+import {ToastProvider} from 'react-toast-notifications'
 
 class BillingForm extends React.Component {
   constructor() {
@@ -46,8 +46,8 @@ class BillingForm extends React.Component {
       await this.props.setFulfilled(this.props.user.id, this.props.cart.id)
       await this.props.fetchOrder(this.props.user.id)
       await this.props.getEmptyCartAndUser(data)
-      const {addToast} = useToasts()
-      addToast('Congrats on the chairs bro!', {appearance: 'success'})
+      // const {addToast} = useToasts()
+      // addToast('Congrats on the chairs bro!', {appearance: 'success'})
       //toast
     }
   }
@@ -58,32 +58,15 @@ class BillingForm extends React.Component {
     console.log('props', this.props)
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>Name:</label>
-          <input
-            name="name"
-            type="text"
-            value={this.state.name}
-            onChange={this.handleChange}
+        <ToastProvider>
+          <ChildBillingForm
+            handleSubmit={this.handleSubmit}
+            handleChange={this.handleChange}
+            address={this.state.address}
+            cardNumber={this.state.cardNumber}
+            name={this.state.name}
           />
-          <label>Address:</label>
-          <input
-            name="address"
-            type="text"
-            value={this.state.address}
-            onChange={this.handleChange}
-          />
-          <label>Credit Card:</label>
-          <input
-            name="cardNumber"
-            type="text"
-            placeholder="Not a real CC...SERIOUSLY"
-            value={this.state.cardNumber}
-            onChange={this.handleChange}
-          />
-
-          <button type="submit">Add to cart</button>
-        </form>
+        </ToastProvider>
       </div>
     )
   }
