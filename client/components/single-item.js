@@ -5,8 +5,7 @@ import {connect} from 'react-redux'
 import {postToOrder, putToOrder} from '../store/order'
 import {fetchSingleProduct, changeProduct} from '../store/single-product'
 import {deleteItem, deleteProduct} from '../store/products'
-import {Link} from 'react-router-dom'
-
+import history from '../history'
 /**
  * COMPONENT
  */
@@ -101,6 +100,7 @@ class SingleItem extends Component {
         let stringifiedOrder = JSON.stringify(destringifiedOrder)
         localStorage.setItem('guestOrder', stringifiedOrder)
       }
+      history.push('/shop')
     }
   }
   handlePut(event) {
@@ -110,7 +110,6 @@ class SingleItem extends Component {
       price: this.state.putPrice,
       description: this.state.putDescription
     }
-    console.log('🧐this is the handlePut', newChair)
     this.props.changeProduct(newChair)
   }
   handleDelete(event) {
@@ -136,20 +135,17 @@ class SingleItem extends Component {
             <small>Description:</small>
           </h1>
           <p>{singleProduct.description}</p>
-          <Link to="/shop">
-            <form onSubmit={this.handleSubmit}>
-              <input
-                name="quantity"
-                type="number"
-                min="1"
-                value={this.state.quantity}
-                onChange={this.handleChange}
-              />
-              <button link="/shop" type="submit">
-                Add to cart
-              </button>
-            </form>
-          </Link>
+
+          <form onSubmit={this.handleSubmit}>
+            <input
+              name="quantity"
+              type="number"
+              min="1"
+              value={this.state.quantity}
+              onChange={this.handleChange}
+            />
+            <button type="submit">Add to cart</button>
+          </form>
         </div>
       )
     } else if (
