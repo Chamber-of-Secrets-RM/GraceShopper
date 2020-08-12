@@ -31,9 +31,13 @@ class BillingForm extends React.Component {
       [event.target.name]: event.target.value
     })
   }
-  handleSubmit() {
-    // This block will handle logged in users
-    // git add
+  async handleSubmit(e) {
+    e.preventDefault()
+    if (this.props.user.email) {
+      await setFulfilled(this.props.user.id, this.props.cart.id)
+      await this.props.fetchOrder(this.props.user.id)
+      //toast
+    }
   }
   render() {
     let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
@@ -66,7 +70,14 @@ class BillingForm extends React.Component {
             onChange={this.handleChange}
           />
 
-          <button type="button">Submit</button>
+          <button
+            type="button"
+            onCLick={e => {
+              this.handleSubmit()
+            }}
+          >
+            Submit
+          </button>
         </div>
       </div>
     )
