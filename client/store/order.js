@@ -96,7 +96,7 @@ export function postToOrder(productId, userId, quantity) {
           quantity: quantity
         }
       )
-      dispatch(addToOrder(data))
+      dispatch(fetchOrder(userId))
     } catch (err) {
       console.error(err)
     }
@@ -112,7 +112,7 @@ export function putToOrder(productId, userId, quantity) {
         }
       )
       console.log('DATA FROM PUT AXIOS', data)
-      dispatch(addToOrder(data))
+      dispatch(fetchOrder(userId))
     } catch (err) {
       console.error(err)
     }

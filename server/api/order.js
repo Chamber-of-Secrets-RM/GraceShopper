@@ -162,6 +162,7 @@ router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
       quantity: req.body.quantity,
       itemTotal: currentChair.price * req.body.quantity
     })
+
     res.json(data)
   } catch (error) {
     next(error)
@@ -187,7 +188,7 @@ router.post('/guestOrder', async (req, res, next) => {
 //Need to check order on front end to make sure chair is in the order/cart
 router.put('/user/:userId/chair/:chairId', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.session.userId) {
       res.sendStatus(505)
       throw new Error('This user is not allowed to access this order')
     }
@@ -252,7 +253,7 @@ router.put('/setFulfilled/:orderId', async (req, res, next) => {
 // from passport
 router.put('/user/:userId/setFulfilled/:orderId', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.session.userId) {
       res.sendStatus(505)
       throw new Error('This user is not allowed to access this order')
     } else if (req.user.id != req.params.userId) {
@@ -267,6 +268,9 @@ router.put('/user/:userId/setFulfilled/:orderId', async (req, res, next) => {
       {
         where: {
           id: req.params.orderId
+        },
+        include: {
+          model: Chair
         },
         returning: true
       }
@@ -284,7 +288,7 @@ router.put('/user/:userId/setFulfilled/:orderId', async (req, res, next) => {
 
 router.delete('/user/:userId/chair/:chairId/', async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.session.userId) {
       res.sendStatus(505)
       throw new Error('This user is not allowed to access this order')
     }
