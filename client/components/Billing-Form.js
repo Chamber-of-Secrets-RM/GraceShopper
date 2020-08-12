@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchOrder} from '../store/order'
+import {fetchOrder, setFulfilled} from '../store/order'
 import {fetchProducts} from '../store/products'
 
 class BillingForm extends React.Component {
@@ -33,8 +33,10 @@ class BillingForm extends React.Component {
   }
   async handleSubmit(e) {
     e.preventDefault()
+    console.log('made it into handle submit')
     if (this.props.user.email) {
-      await setFulfilled(this.props.user.id, this.props.cart.id)
+      console.log('made it into here?!?!??!??!??!?!?!?!!?')
+      await this.props.setFulfilled(this.props.user.id, this.props.cart.id)
       await this.props.fetchOrder(this.props.user.id)
       //toast
     }
@@ -46,7 +48,7 @@ class BillingForm extends React.Component {
     console.log('props', this.props)
     return (
       <div>
-        <div className="billingForm">
+        <form onSubmit={this.handleSubmit}>
           <label>Name:</label>
           <input
             name="name"
@@ -70,15 +72,8 @@ class BillingForm extends React.Component {
             onChange={this.handleChange}
           />
 
-          <button
-            type="button"
-            onCLick={e => {
-              this.handleSubmit()
-            }}
-          >
-            Submit
-          </button>
-        </div>
+          <button type="submit">Add to cart</button>
+        </form>
       </div>
     )
   }
@@ -96,6 +91,7 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     fetchOrder: userId => dispatch(fetchOrder(userId)),
+    setFulfilled: (userId, orderId) => dispatch(setFulfilled(userId, orderId)),
     fetchProducts: () => dispatch(fetchProducts())
   }
 }

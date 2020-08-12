@@ -54,8 +54,11 @@ export function fetchOrder(userId) {
   return async function(dispatch) {
     try {
       const {data} = await axios.get(`/api/order/user/${userId}`)
-      console.log('@#$@#$#@%#@%@#%@#^#@^@#^#@^@#^&', data.chairs)
-      dispatch(setOrder(data.chairs))
+      if (!data.chairs) dispatch(setOrder([]))
+      else {
+        console.log('@#$@#$#@%#@%@#%@#^#@^@#^#@^@#^&', data.chairs)
+        dispatch(setOrder(data.chairs))
+      }
     } catch (err) {
       console.error(err)
     }
@@ -121,10 +124,7 @@ export function setFulfilled(userId, orderId) {
   return async function(dispatch) {
     try {
       const {data} = await axios.put(
-        `/api/order/user/${userId}/setFulfilled/${orderId}`,
-        {
-          quantity: quantity
-        }
+        `/api/order/user/${userId}/setFulfilled/${orderId}`
       )
       console.log('DATA FROM PUT AXIOS', data)
       dispatch(clearOrder())
