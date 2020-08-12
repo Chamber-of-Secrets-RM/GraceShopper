@@ -33,7 +33,6 @@ const Chair = db.define('chair', {
 })
 
 Chair.beforeUpdate(chair => {
-  console.log('😃this is the chair.price :', chair.price)
   chair.price = parseInt(chair.dataValues.price * 100)
 })
 

@@ -20,12 +20,9 @@ class ShoppingCart extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   async componentDidMount() {
-    console.log('inside shoppingCar CDM', this.props)
-    // don't think we need this
     if (this.props.loggedOut) {
       this.props.clearOrder()
     } else {
-      console.log('IS THIS RUNNING WHEN I LOG OUT?!?!?!??')
       this.props.fetchOrder(this.props.user.id)
     }
     this.props.fetchProducts()
@@ -33,24 +30,20 @@ class ShoppingCart extends Component {
   handleSubmit(user, userId, comparableChairId) {
     // needs to be the tested: correct parameter?
     event.preventDefault()
-    console.log('INSIDE OF REMOVE FROM CART BUTTON, WHAT IOS USER', user)
+
     if (!user) {
       // guest user block
       let currentGuestOrder = JSON.parse(localStorage.getItem('guestOrder'))
-      // console.log('currentGuestOrder', currentGuestOrder)
       currentGuestOrder = currentGuestOrder.filter(chair => {
-        // console.log('COMPARING BETWEEN', comparableChairId, chair.chairId)
         return comparableChairId !== chair.chairId
       })
       let stringifiedOrder = JSON.stringify(currentGuestOrder)
       localStorage.setItem('guestOrder', stringifiedOrder)
-      // console.log('ABOUT TO SET STATE HERE', this.state)
       this.setState(state => {
         return {quantity: state.quantity + 1}
       })
     } else {
       //logged in user block
-      // console.log('WE DONT WANT TO MAKE IT IN HERE!!!!!!!!!!!!!!')
       this.props.deleteItem(userId, comparableChairId)
     }
   } // end of handleSubmit
@@ -59,7 +52,7 @@ class ShoppingCart extends Component {
       return <div />
     }
     //These are not real products
-    console.log('this.props!!!!!!!!!!!!!!!!!!!!', this.props)
+
     // if this object is empty we know we are a guest
     if (Object.keys(this.props.cartInfo).length === 0) {
       let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
@@ -113,14 +106,14 @@ class ShoppingCart extends Component {
           ))}
 
           <div>
-            Total: ${this.props.cartInfo.reduce((accumulator, chair) => {
+            Total: $
+            {this.props.cartInfo.reduce((accumulator, chair) => {
               return (accumulator += chair.price * chair.ordersChairs.quantity)
             }, 0)}
           </div>
           <Link to="/checkout">
             <button>Checkout</button>
           </Link>
-
         </div>
       )
     } else {

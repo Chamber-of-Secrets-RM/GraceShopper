@@ -12,11 +12,6 @@ export default class CheckoutElement extends Component {
   render() {
     const {product, imageUrl, name} = this.props
     if (!this.props.user) {
-      console.log(
-        'what is this.props!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-        this.props
-      )
-      console.log('WHAT IS A GUESTS PRODUCT INFORMATION', product)
       return (
         <div className="checkout-element">
           <div>
@@ -43,9 +38,7 @@ export default class CheckoutElement extends Component {
         </div>
       )
     }
-    // console.log('this.props IN CHECKOUT ELEMENT', product.ordersChairs.quantity)
     if (!product.ordersChairs) {
-      console.log('what is product!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', this.props)
       return <div>hello</div>
     }
     return (

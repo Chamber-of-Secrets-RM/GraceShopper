@@ -55,7 +55,6 @@ class AllProducts extends React.Component {
     } else {
       filteredProducts = products
     }
-    console.log('render in all-products:', filteredProducts)
     //Pagination indexes
     const {currentPage, chairsPerPage} = this.state
     const indexEndOfPage = currentPage * chairsPerPage
