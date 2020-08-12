@@ -116,6 +116,24 @@ export function putToOrder(productId, userId, quantity) {
   }
 }
 
+// fulfills a users order
+export function setFulfilled(productId, userId, quantity) {
+  return async function(dispatch) {
+    try {
+      const {data} = await axios.put(
+        `/api/order/user/${userId}/chair/${productId}`,
+        {
+          quantity: quantity
+        }
+      )
+      console.log('DATA FROM PUT AXIOS', data)
+      dispatch(addToOrder(data))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
 /*
  * Reducer
  */

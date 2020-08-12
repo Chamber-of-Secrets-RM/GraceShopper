@@ -64,7 +64,7 @@ router.get(
         raw: true
       })
       // check if admin or correct user //
-      console.log('WHAT IS MY DATA I AM GETTING FROM ORDERSCHAIRS', data)
+      console.log('WHAT IS MY DATA I AM GETTING FROM ORDERSCHAIRS', req.session)
       res.json(data)
     } catch (err) {
       next(err)
@@ -96,7 +96,8 @@ router.get(
           orderId: {
             [Op.in]: orderIdsArray
           }
-        }
+        },
+        raw: true
       })
 
       console.log('what is final data', data)
@@ -147,6 +148,20 @@ router.post('/user/:userId/chair/:chairId', async (req, res, next) => {
       next(err) // needs to be tested, how are we going to throw custom error
       /// Could just check req.session instead of lines 69-78
     }
+    const currentChair = await Chair.findByPk(req.params.chairId)
+    const data = await OrdersChairs.create({
+      orderId: userOrderInstance.id,
+      chairId: req.params.chairId,
+      quantity: req.body.quantity,
+      itemTotal: currentChair.price * req.body.quantity
+    })
+    res.json(data)
+  } catch (error) {
+    next(error)
+  }
+}) //post route to Orders to create a new Guest Order
+router.post('/guestOrder', async (req, res, next) => {
+  try {
     const currentChair = await Chair.findByPk(req.params.chairId)
     const data = await OrdersChairs.create({
       orderId: userOrderInstance.id,
@@ -220,6 +235,40 @@ router.put('/setFulfilled/:orderId', async (req, res, next) => {
     )
     console.log('WHAT IS NUMUPDATED', numUpdated)
     console.log('WHAT IS DATA ON THE BACKEND fOR PUT', affectedRows)
+    res.json(affectedRows[0])
+  } catch (error) {
+    next(error)
+  }
+})
+
+// same as above but with a userId and checking if that user is logged in
+// from passport
+router.put('/user/:userId/setFulfilled/:orderId', async (req, res, next) => {
+  try {
+    if (!req.user) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    } else if (req.user.id != req.params.userId) {
+      res.sendStatus(505)
+      throw new Error('This user is not allowed to access this order')
+    }
+    const [numUpdated, affectedRows] = await Order.update(
+      {
+        isFulfilled: 1
+        // itemTotal: currentChair.price * req.body.quantity
+      },
+      {
+        where: {
+          id: req.params.orderId
+        },
+        returning: true
+      }
+    )
+    console.log('WHAT IS NUMUPDATED', numUpdated)
+    console.log(
+      'WHAT IS DATA ON THE BACKEND fOR BILLING CHECKOUT',
+      affectedRows
+    )
     res.json(affectedRows[0])
   } catch (error) {
     next(error)

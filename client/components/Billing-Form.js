@@ -31,7 +31,10 @@ class BillingForm extends React.Component {
       [event.target.name]: event.target.value
     })
   }
-  handleSubmit() {}
+  handleSubmit() {
+    // This block will handle logged in users
+    // git add
+  }
   render() {
     let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
 
