@@ -28,9 +28,7 @@ export default class CheckoutElement extends Component {
             <Link to={`/products/${product.id}`}>
               <div>{name}</div>
             </Link>
-            <div>
-              Qty:{product.quantity} x ${product.price}
-            </div>
+            <div>Qty:{product.quantity}</div>
             <button
               onClick={() =>
                 this.props.handleSubmit(this.props.user, null, product.chairId)
@@ -38,7 +36,7 @@ export default class CheckoutElement extends Component {
             >
               Remove from cart
             </button>
-            <div>Price: ${product.itemTotal}</div>
+            <div>Total price: ${product.itemTotal}</div>
           </div>
         </div>
       )

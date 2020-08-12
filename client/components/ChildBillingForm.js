@@ -1,13 +1,12 @@
 import React from 'react'
 
 import {useToasts} from 'react-toast-notifications'
-
 export default function ChildBillingForm(props) {
   const {addToast} = useToasts()
 
   const handleChildSubmit = e => {
     console.log('not making it into child handle?')
-    addToast('Congrats on the chairs bro!', {appearance: 'success'})
+    addToast('Gotcha, these are fake chairs dummy!', {appearance: 'success'})
     props.handleSubmit(e)
   }
   return (

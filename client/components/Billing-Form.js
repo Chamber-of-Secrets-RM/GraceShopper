@@ -5,6 +5,7 @@ import {fetchProducts} from '../store/products'
 import {getEmptyCartAndUser} from '../store/user'
 import ChildBillingForm from './ChildBillingForm'
 import {ToastProvider} from 'react-toast-notifications'
+import history from '../history'
 
 class BillingForm extends React.Component {
   constructor() {
@@ -46,6 +47,8 @@ class BillingForm extends React.Component {
       await this.props.setFulfilled(this.props.user.id, this.props.cart.id)
       await this.props.fetchOrder(this.props.user.id)
       await this.props.getEmptyCartAndUser(data)
+      localStorage.clear()
+      history.push('/home')
       // const {addToast} = useToasts()
       // addToast('Congrats on the chairs bro!', {appearance: 'success'})
       //toast
