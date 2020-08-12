@@ -49,6 +49,12 @@ class LineGraph extends Component {
       }
       testArray.push(newObj)
     }
+    let total = testArray[0].y
+    for (let i = 1; i < testArray.length; i++) {
+      let temp = testArray[i].y
+      testArray[i].y += total
+      total += temp
+    }
 
     console.log('WHAT IS MY TEST ARRAY', testArray)
     // convert all dates in array to match the domain on line 61

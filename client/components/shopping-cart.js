@@ -98,7 +98,7 @@ class ShoppingCart extends Component {
         )
       }
     }
-    if (this.props.cartInfo) {
+    if (this.props.cartInfo[0].ordersChairs) {
       console.log('AM I MAKING IT HERE?!?!?!?!??!?!?!?')
       return (
         <div className="checkout-container">
@@ -120,7 +120,6 @@ class ShoppingCart extends Component {
           <Link to="/checkout">
             <button>Checkout</button>
           </Link>
-
         </div>
       )
     } else {

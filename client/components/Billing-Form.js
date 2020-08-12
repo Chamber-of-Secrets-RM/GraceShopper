@@ -1,7 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchOrder} from '../store/order'
+import {fetchOrder, setFulfilled} from '../store/order'
 import {fetchProducts} from '../store/products'
+import {getEmptyCartAndUser} from '../store/user'
+import ChildBillingForm from './ChildBillingForm'
+import {ToastProvider} from 'react-toast-notifications'
+import history from '../history'
 
 class BillingForm extends React.Component {
   constructor() {
@@ -31,7 +35,24 @@ class BillingForm extends React.Component {
       [event.target.name]: event.target.value
     })
   }
-  handleSubmit() {}
+  async handleSubmit(e) {
+    e.preventDefault()
+    console.log('made it into handle submit')
+    let data = {
+      // special formatting for getEmptyCartAndUser
+      id: this.props.user.id
+    }
+    if (this.props.user.email) {
+      console.log('made it into here?!?!??!??!??!?!?!?!!?')
+      await this.props.setFulfilled(this.props.user.id, this.props.cart.id)
+      await this.props.fetchOrder(this.props.user.id)
+      await this.props.getEmptyCartAndUser(data)
+
+      // const {addToast} = useToasts()
+      // addToast('Congrats on the chairs bro!', {appearance: 'success'})
+      //toast
+    }
+  }
   render() {
     let guestOrder = JSON.parse(localStorage.getItem('guestOrder'))
 
@@ -39,32 +60,15 @@ class BillingForm extends React.Component {
     console.log('props', this.props)
     return (
       <div>
-        <div className="billingForm">
-          <label>Name:</label>
-          <input
-            name="name"
-            type="text"
-            value={this.state.name}
-            onChange={this.handleChange}
+        <ToastProvider>
+          <ChildBillingForm
+            handleSubmit={this.handleSubmit}
+            handleChange={this.handleChange}
+            address={this.state.address}
+            cardNumber={this.state.cardNumber}
+            name={this.state.name}
           />
-          <label>Address:</label>
-          <input
-            name="address"
-            type="text"
-            value={this.state.address}
-            onChange={this.handleChange}
-          />
-          <label>Credit Card:</label>
-          <input
-            name="cardNumber"
-            type="text"
-            placeholder="Not a real CC...SERIOUSLY"
-            value={this.state.cardNumber}
-            onChange={this.handleChange}
-          />
-
-          <button type="button">Submit</button>
-        </div>
+        </ToastProvider>
       </div>
     )
   }
@@ -82,7 +86,9 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     fetchOrder: userId => dispatch(fetchOrder(userId)),
-    fetchProducts: () => dispatch(fetchProducts())
+    setFulfilled: (userId, orderId) => dispatch(setFulfilled(userId, orderId)),
+    fetchProducts: () => dispatch(fetchProducts()),
+    getEmptyCartAndUser: data => dispatch(getEmptyCartAndUser(data))
   }
 }
 export default connect(mapState, mapDispatch)(BillingForm)

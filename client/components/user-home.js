@@ -28,6 +28,7 @@ export class UserHome extends Component {
   async componentDidUpdate() {
     if (this.state.quantity === 1) {
       this.setState({quantity: this.state.quantity + 1})
+
       await this.props.fetchOrder(this.props.user.id)
 
       if (this.props.isAdmin) {
@@ -40,7 +41,8 @@ export class UserHome extends Component {
     let currentGuestOrder = localStorage.getItem('guestOrder')
     let destringifiedOrder = JSON.parse(currentGuestOrder)
 
-    if (!this.props.order.length) {
+    if (!this.props.user.email) {
+      console.log('THIS USER IS A GUEST DONT DO DATABASE STUFF')
       //debugging
     } else if (destringifiedOrder) {
       for (let i of destringifiedOrder) {

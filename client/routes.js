@@ -20,14 +20,14 @@ import BillingForm from './components/Billing-Form'
  * COMPONENT
  */
 class Routes extends Component {
-  async componentDidMount() {
-    try {
-      await this.props.loadInitialData()
-    } catch (err) {
-      console.error(err)
-    }
-    console.log('routes compoenentdidmount:', this.props)
-  }
+  // async componentDidMount() {
+  //   try {
+  //     await this.props.loadInitialData()
+  //   } catch (err) {
+  //     console.error(err)
+  //   }
+  //   console.log('routes compoenentdidmount:', this.props)
+  // }
   render() {
     const {isLoggedIn} = this.props
 
