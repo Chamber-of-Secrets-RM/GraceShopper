@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import {postToOrder, putToOrder} from '../store/order'
 import {fetchSingleProduct, changeProduct} from '../store/single-product'
 import {deleteItem, deleteProduct} from '../store/products'
+import {Link} from 'react-router-dom'
 
 /**
  * COMPONENT
@@ -135,16 +136,20 @@ class SingleItem extends Component {
             <small>Description:</small>
           </h1>
           <p>{singleProduct.description}</p>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              name="quantity"
-              type="number"
-              min="1"
-              value={this.state.quantity}
-              onChange={this.handleChange}
-            />
-            <button type="submit">Add to cart</button>
-          </form>
+          <Link to="/shop">
+            <form onSubmit={this.handleSubmit}>
+              <input
+                name="quantity"
+                type="number"
+                min="1"
+                value={this.state.quantity}
+                onChange={this.handleChange}
+              />
+              <button link="/shop" type="submit">
+                Add to cart
+              </button>
+            </form>
+          </Link>
         </div>
       )
     } else if (
@@ -152,7 +157,6 @@ class SingleItem extends Component {
       singleProduct.id &&
       this.props.user.user.isAdmin === true
     ) {
-      console.log('🍣PROPS', this.props, '🧐STATE', this.state)
       return (
         <div className="single-product-view">
           <h1>Admin view</h1>
