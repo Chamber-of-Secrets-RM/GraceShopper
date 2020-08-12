@@ -117,17 +117,17 @@ export function putToOrder(productId, userId, quantity) {
 }
 
 // fulfills a users order
-export function setFulfilled(productId, userId, quantity) {
+export function setFulfilled(userId, orderId) {
   return async function(dispatch) {
     try {
       const {data} = await axios.put(
-        `/api/order/user/${userId}/chair/${productId}`,
+        `/api/order/user/${userId}/setFulfilled/${orderId}`,
         {
           quantity: quantity
         }
       )
       console.log('DATA FROM PUT AXIOS', data)
-      dispatch(addToOrder(data))
+      dispatch(clearOrder())
     } catch (err) {
       console.error(err)
     }
